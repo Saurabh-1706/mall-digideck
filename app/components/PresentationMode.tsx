@@ -48,47 +48,63 @@ export default function PresentationMode({ children, leftNav }: PresentationMode
   // Wheel navigation
   useEffect(() => {
     let lastNavTime = Date.now();
-    let wheelTimeout: NodeJS.Timeout;
-    let isScrolling = false;
+    let wheelTimeout: NodeJS.Timeout | null = null;
+    let isLocked = false;
+    let accumulatedDelta = 0;
+    let blockCurrentStream = false;
     
     const handleWheel = (e: WheelEvent) => {
       const target = e.target as HTMLElement;
-      // Do not intercept if scrolling inside a scrollable section, UNLESS we are at the boundaries
-      const scrollableParent = target.closest('[data-lenis-prevent="true"], .overflow-y-auto') as HTMLElement;
-      if (scrollableParent) {
-        const isAtTop = scrollableParent.scrollTop <= 0;
-        const isAtBottom = Math.abs(scrollableParent.scrollHeight - scrollableParent.clientHeight - scrollableParent.scrollTop) <= 1;
-        
-        if (e.deltaY > 0 && !isAtBottom) {
-          return; // Allow native scroll down
-        }
-        if (e.deltaY < 0 && !isAtTop) {
-          return; // Allow native scroll up
-        }
-      }
 
       const now = Date.now();
       
       // Trackpad inertia fix: clear timeout on every wheel event
       if (wheelTimeout) clearTimeout(wheelTimeout);
       
-      // Reset scrolling state after 150ms of NO wheel events (inertia has stopped)
+      // Reset accumulation, lock state, and stream state after 400ms of NO wheel events
       wheelTimeout = setTimeout(() => {
-        isScrolling = false;
-      }, 150);
+        isLocked = false;
+        accumulatedDelta = 0;
+        blockCurrentStream = false;
+        wheelTimeout = null;
+      }, 400);
 
-      // Block if we navigated recently OR if trackpad inertia is still actively firing
-      if (now - lastNavTime < 1200 || isScrolling) return;
+      // Do not intercept if scrolling inside a scrollable section, UNLESS we are at the boundaries
+      const scrollableParent = target.closest('[data-lenis-prevent="true"], .overflow-y-auto') as HTMLElement;
+      if (scrollableParent) {
+        const isAtTop = scrollableParent.scrollTop <= 0;
+        // Add a small 2px buffer for rounding errors in scroll calculations
+        const isAtBottom = Math.abs(scrollableParent.scrollHeight - scrollableParent.clientHeight - scrollableParent.scrollTop) <= 2;
+        
+        if (e.deltaY > 0 && !isAtBottom) {
+          blockCurrentStream = true; // Mark this continuous scroll stream as native-only
+          return; // Allow native scroll down
+        }
+        if (e.deltaY < 0 && !isAtTop) {
+          blockCurrentStream = true;
+          return; // Allow native scroll up
+        }
+      }
+
+      // If this swipe started as a native scroll, do not let its leftover inertia change the slide
+      if (blockCurrentStream) return;
+
+      // Block if we navigated recently OR if we are still locked from a previous swipe
+      if (now - lastNavTime < 1200 || isLocked) return;
       
-      // Require a slightly higher threshold for the initial swipe
-      if (Math.abs(e.deltaY) > 40) {
-        if (e.deltaY > 0) {
+      // Accumulate scroll distance
+      accumulatedDelta += e.deltaY;
+      
+      // Require a deliberate, sustained scroll (accumulation > 150) to trigger
+      if (Math.abs(accumulatedDelta) > 150) {
+        if (accumulatedDelta > 0) {
           navigate(1);
         } else {
           navigate(-1);
         }
         lastNavTime = now;
-        isScrolling = true; // Lock until inertia stops
+        isLocked = true; // Lock until user completely stops scrolling
+        accumulatedDelta = 0;
       }
     };
 
