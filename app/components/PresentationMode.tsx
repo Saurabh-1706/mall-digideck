@@ -47,7 +47,9 @@ export default function PresentationMode({ children, leftNav }: PresentationMode
 
   // Wheel navigation
   useEffect(() => {
-    let lastWheelTime = Date.now();
+    let lastNavTime = Date.now();
+    let wheelTimeout: NodeJS.Timeout;
+    let isScrolling = false;
     
     const handleWheel = (e: WheelEvent) => {
       const target = e.target as HTMLElement;
@@ -66,21 +68,35 @@ export default function PresentationMode({ children, leftNav }: PresentationMode
       }
 
       const now = Date.now();
-      // Debounce slightly to prevent flying through slides
-      if (now - lastWheelTime < 800) return;
       
-      if (Math.abs(e.deltaY) > 30) {
+      // Trackpad inertia fix: clear timeout on every wheel event
+      if (wheelTimeout) clearTimeout(wheelTimeout);
+      
+      // Reset scrolling state after 150ms of NO wheel events (inertia has stopped)
+      wheelTimeout = setTimeout(() => {
+        isScrolling = false;
+      }, 150);
+
+      // Block if we navigated recently OR if trackpad inertia is still actively firing
+      if (now - lastNavTime < 1200 || isScrolling) return;
+      
+      // Require a slightly higher threshold for the initial swipe
+      if (Math.abs(e.deltaY) > 40) {
         if (e.deltaY > 0) {
           navigate(1);
         } else {
           navigate(-1);
         }
-        lastWheelTime = now;
+        lastNavTime = now;
+        isScrolling = true; // Lock until inertia stops
       }
     };
 
     window.addEventListener('wheel', handleWheel, { passive: false });
-    return () => window.removeEventListener('wheel', handleWheel);
+    return () => {
+      window.removeEventListener('wheel', handleWheel);
+      if (wheelTimeout) clearTimeout(wheelTimeout);
+    };
   }, [navigate]);
 
   // Mobile: Scroll detection (for stacked sections)
