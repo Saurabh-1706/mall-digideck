@@ -26,7 +26,7 @@ export default function RetailSection() {
   return (
     <>
       <LeasingModule isOpen={leasingOpen} onClose={() => setLeasingOpen(false)} />
-      <section ref={containerRef} id="retail" className="relative h-screen bg-primary flex items-center justify-center px-6 py-10 lg:py-16 overflow-hidden">
+      <section ref={containerRef} id="retail" className="relative h-screen bg-primary flex items-center justify-center px-6 py-8 lg:py-10 overflow-hidden">
       
       {/* Three.js 3D Background - Geometric Brand Particles */}
       <Section3DBackground
@@ -51,11 +51,11 @@ export default function RetailSection() {
         />
       </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto w-full max-h-full overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none'] pb-4">
+      <div className="relative z-10 max-w-7xl mx-auto w-full">
         {/* Header */}
         <ScrollReveal>
-          <div className="text-center mb-8 lg:mb-12">
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4">
+          <div className="text-center mb-6 lg:mb-8">
+            <h2 className="text-4xl md:text-5xl lg:text-5xl font-bold text-white mb-2">
               800+ Brands. Infinite Possibilities.
             </h2>
             <p className="text-lg md:text-xl text-text-muted max-w-3xl mx-auto">
@@ -65,7 +65,7 @@ export default function RetailSection() {
         </ScrollReveal>
 
         {/* Video + Content Split */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 mb-10 lg:mb-12">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 mb-6 lg:mb-8">
           {/* Video */}
           <ScrollReveal direction="left">
             <div className="aspect-video rounded-lg overflow-hidden">
@@ -80,28 +80,28 @@ export default function RetailSection() {
           {/* Content */}
           <ScrollReveal direction="right">
             <div className="flex flex-col justify-center h-full">
-              <h3 className="text-3xl font-bold text-white mb-6">
+              <h3 className="text-2xl lg:text-3xl font-bold text-white mb-3">
                 Unmatched Retail Diversity
               </h3>
-              <p className="text-text-muted mb-8 leading-relaxed">
+              <p className="text-sm lg:text-base text-text-muted mb-6 leading-relaxed">
                 West Edmonton Mall houses an incredible mix of retailers, from international 
                 luxury brands to unique local boutiques. Our diverse tenant mix ensures something 
                 for every shopper, driving consistent foot traffic across all categories.
               </p>
 
               {/* Stats */}
-              <div className="grid grid-cols-2 gap-6 mb-8">
+              <div className="grid grid-cols-2 gap-4 mb-4">
                 <div>
-                  <div className="text-4xl font-bold text-accent mb-2">
+                  <div className="text-3xl lg:text-4xl font-bold text-accent mb-1">
                     {RETAIL_DATA.footTraffic.daily}
                   </div>
-                  <div className="text-sm text-text-muted">Daily Visitors</div>
+                  <div className="text-xs lg:text-sm text-text-muted">Daily Visitors</div>
                 </div>
                 <div>
-                  <div className="text-4xl font-bold text-accent mb-2">
+                  <div className="text-3xl lg:text-4xl font-bold text-accent mb-1">
                     {RETAIL_DATA.footTraffic.peak}
                   </div>
-                  <div className="text-sm text-text-muted">Peak Traffic</div>
+                  <div className="text-xs lg:text-sm text-text-muted">Peak Traffic</div>
                 </div>
               </div>
             </div>
@@ -114,11 +114,11 @@ export default function RetailSection() {
             {RETAIL_DATA.categories.map((category, index) => (
               <div
                 key={index}
-                className="group p-5 md:p-6 bg-surface/80 backdrop-blur-sm border border-border hover:border-accent transition-all duration-500 hover:scale-105 hover:shadow-[0_0_30px_rgba(201,169,98,0.15)] hover:-translate-y-1 cursor-pointer"
+                className="group p-4 md:p-5 bg-surface/80 backdrop-blur-sm border border-border hover:border-accent transition-all duration-500 hover:scale-105 hover:shadow-[0_0_30px_rgba(201,169,98,0.15)] hover:-translate-y-1 cursor-pointer"
               >
-                <div className="flex justify-between items-start mb-4">
-                  <h4 className="text-xl font-bold text-white group-hover:text-accent transition-colors duration-300">{category.name}</h4>
-                  <span className="text-2xl font-bold text-accent">{category.count}</span>
+                <div className="flex justify-between items-start mb-2">
+                  <h4 className="text-lg lg:text-xl font-bold text-white group-hover:text-accent transition-colors duration-300">{category.name}</h4>
+                  <span className="text-xl lg:text-2xl font-bold text-accent">{category.count}</span>
                 </div>
                 <p className="text-text-muted text-sm">
                   {category.examples.join(' • ')}
@@ -130,10 +130,10 @@ export default function RetailSection() {
 
         {/* CTA */}
         <ScrollReveal delay={0.3}>
-          <div className="mt-8 lg:mt-12 text-center">
+          <div className="mt-6 lg:mt-8 text-center">
             <button
               onClick={() => setLeasingOpen(true)}
-              className="group relative inline-block px-12 py-5 bg-gradient-to-r from-accent to-accent-hover text-primary font-semibold text-lg overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-accent/20"
+              className="group relative inline-block px-8 py-4 lg:px-10 bg-gradient-to-r from-accent to-accent-hover text-primary font-semibold text-base lg:text-lg overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-accent/20"
             >
               <span className="relative z-10">Explore Leasing Opportunities</span>
               <div className="absolute inset-0 bg-gradient-to-r from-accent-hover to-accent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
