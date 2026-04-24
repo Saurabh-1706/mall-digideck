@@ -26,7 +26,7 @@ export default function HeroSection() {
               initial={{ opacity: 0, y: 40 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1, delay: 0.8 }}
-              className="text-8xl md:text-[10rem] lg:text-[14rem] font-bold text-white mb-6 tracking-tighter leading-none"
+              className="text-7xl md:text-8xl lg:text-[9rem] xl:text-[11rem] font-bold text-white mb-6 tracking-tighter leading-none"
             >
               West Edmonton
               <br />
