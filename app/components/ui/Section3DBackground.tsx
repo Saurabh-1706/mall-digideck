@@ -33,7 +33,7 @@ export default function Section3DBackground({
   const cameraRef = useRef<THREE.PerspectiveCamera | null>(null);
   const particlesRef = useRef<THREE.Points | null>(null);
   const mouseRef = useRef({ x: 0, y: 0 });
-  const animationIdRef = useRef<number>();
+  const animationIdRef = useRef<number | null>(null);
 
   useEffect(() => {
     if (!containerRef.current) return;
