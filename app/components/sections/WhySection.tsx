@@ -6,85 +6,63 @@ import { MALL_STATS } from '../../lib/constants';
 import ScrollReveal from '../ui/ScrollReveal';
 import AnimatedCounter from '../ui/AnimatedCounter';
 import Section3DBackground from '../ui/Section3DBackground';
-import { useGSAPSectionAnimation } from '../../hooks/useGSAPSectionAnimation';
+import LiveDashboard from '../ui/LiveDashboard';
 
 export default function WhySection() {
   const sectionRef = useRef<HTMLElement>(null);
-  const { titleRef, subtitleRef } = useGSAPSectionAnimation(sectionRef as any, {
-    pattern: 'fade-up',
-    delay: 0.2,
-    duration: 1,
-  });
 
   return (
-    <section ref={sectionRef} className="h-screen lg:h-screen bg-primary flex flex-col lg:flex-row overflow-hidden relative pb-16 lg:pb-0">
-      {/* Three.js 3D Background - Floating Golden Particles */}
+    <section ref={sectionRef} className="h-screen bg-primary flex flex-col lg:flex-row overflow-hidden relative">
+      {/* Three.js 3D Background */}
       <Section3DBackground
         particleColor="#C9A962"
-        particleCount={2000}
+        particleCount={1200}
         pattern="float"
         mouseInteraction={true}
-        opacity={0.8}
+        opacity={0.4}
         className="z-0"
       />
-      {/* Mobile: Stacked layout; Desktop: Side-by-side */}
-      
-      {/* ── MOBILE TOP / DESKTOP LEFT ── Images */}
-      <div className="w-full lg:w-[55%] h-[50vh] lg:h-full relative z-10 flex flex-col gap-2 p-2 lg:p-3">
 
-        {/* Row 1: hero.png — full-width dominant image */}
-        <div className="flex-[2] relative overflow-hidden group">
-          <img
-            src="/images/hero.png"
-            alt="West Edmonton Mall — Luxury Exterior"
-            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-          <span className="absolute bottom-2 left-3 lg:bottom-3 lg:left-4 text-white/90 text-xs lg:text-sm font-medium tracking-widest uppercase">
-            West Edmonton Mall
-          </span>
-        </div>
+      {/* ── LEFT: Live Dashboard — THE "I NEED TO BE HERE" MOMENT ── */}
+      <div className="w-full lg:w-[55%] h-[55vh] lg:h-full flex flex-col justify-center px-6 lg:px-10 py-6 relative z-10 overflow-y-auto" data-lenis-prevent="true">
+        {/* Section Label */}
+        <ScrollReveal>
+          <div className="mb-5">
+            <div className="flex items-center gap-3 mb-2">
+              <div className="w-1 h-8 bg-[#C9A962]" />
+              <div>
+                <p className="text-[#C9A962] text-[10px] uppercase tracking-[0.5em] font-medium">West Edmonton Mall</p>
+                <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white leading-tight">
+                  The Pulse of <span className="text-[#C9A962]">North America's</span>
+                  <br />Largest Mall
+                </h2>
+              </div>
+            </div>
+            <p className="text-white/50 text-sm ml-4 pl-3 border-l border-white/10">
+              This isn't historical data — this is what's happening inside WEM <em>right now</em>.
+            </p>
+          </div>
+        </ScrollReveal>
 
-        {/* Row 2: events.png + dining.png side by side */}
-        <div className="flex-[1] flex gap-2">
-          <div className="flex-1 relative overflow-hidden group">
-            <img
-              src="/images/events.png"
-              alt="Live Events & Entertainment inside WEM"
-              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-            <span className="absolute bottom-3 left-3 text-white/90 text-xs font-medium tracking-widest uppercase">
-              🎤 Live Events
-            </span>
-          </div>
-          <div className="flex-1 relative overflow-hidden group">
-            <img
-              src="/images/dining.png"
-              alt="Fine Dining inside WEM"
-              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-            <span className="absolute bottom-3 left-3 text-white/90 text-xs font-medium tracking-widest uppercase">
-              🍽️ Fine Dining
-            </span>
-          </div>
-        </div>
+        {/* THE LIVE DASHBOARD */}
+        <ScrollReveal delay={0.2}>
+          <LiveDashboard />
+        </ScrollReveal>
       </div>
 
-      {/* ── RIGHT PANEL: Desktop 45% / Mobile below ── Content */}
-      <div className="w-full lg:w-[45%] h-[50vh] lg:h-full flex flex-col justify-center px-6 lg:px-14 py-8 lg:py-0 relative z-10 overflow-y-auto pb-20 lg:pb-0">
+      {/* ── RIGHT: Stats + Context ── */}
+      <div className="w-full lg:w-[45%] h-[45vh] lg:h-full flex flex-col justify-center px-6 lg:px-12 py-6 lg:py-0 relative z-10 overflow-y-auto pb-20 lg:pb-0" data-lenis-prevent="true">
 
-        {/* WEM Logo */}
+        {/* Logo */}
         <ScrollReveal>
           <div className="mb-6">
             <img
               src="/images/logo.png"
               alt="WEM Logo"
-              className="h-16 w-auto object-contain mb-4"
+              className="h-14 w-auto object-contain mb-3"
             />
             <motion.div
-              className="w-16 h-px bg-accent"
+              className="w-12 h-px bg-[#C9A962]"
               initial={{ scaleX: 0 }}
               whileInView={{ scaleX: 1 }}
               viewport={{ once: true }}
@@ -93,75 +71,78 @@ export default function WhySection() {
           </div>
         </ScrollReveal>
 
+        {/* Headline */}
         <ScrollReveal delay={0.1}>
-          <div className="mb-6 lg:mb-8">
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-3 leading-tight">
-              North America's
-              <br />
-              <span className="text-accent">Largest Mall</span>
-            </h2>
-            <p className="text-base sm:text-lg text-white/70 font-light">
-              Shopping · Entertainment · Dining · Attractions
+          <div className="mb-6">
+            <h3 className="text-3xl lg:text-4xl font-bold text-white mb-2 leading-tight">
+              Why Here?
+            </h3>
+            <p className="text-white/60 text-sm leading-relaxed">
+              30 million annual visitors. 5.3 million sq ft. 20+ world-class attractions. 
+              The numbers tell part of the story — the pulse above tells the rest.
             </p>
           </div>
         </ScrollReveal>
 
-        {/* Stats Grid - Mobile: 1 column, Desktop: 2 columns */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 lg:gap-4 mb-6 lg:mb-8">
-          <ScrollReveal delay={0.1}>
-            <motion.div
-              className="p-3 sm:p-4 lg:p-5 bg-white/5 backdrop-blur-sm border border-white/10 hover:border-accent/50 transition-all duration-300"
-              whileHover={{ scale: 1.03 }}
-            >
-              <div className="text-2xl sm:text-3xl font-bold text-accent mb-1">
-                <AnimatedCounter target={MALL_STATS.totalArea} duration={2000} delay={0.1} />
-              </div>
-              <div className="text-white/60 text-xs">{MALL_STATS.totalAreaLabel}</div>
-            </motion.div>
-          </ScrollReveal>
-
-          <ScrollReveal delay={0.2}>
-            <motion.div
-              className="p-3 sm:p-4 lg:p-5 bg-white/5 backdrop-blur-sm border border-white/10 hover:border-accent/50 transition-all duration-300"
-              whileHover={{ scale: 1.03 }}
-            >
-              <div className="text-2xl sm:text-3xl font-bold text-accent mb-1">
-                <AnimatedCounter target={MALL_STATS.totalStores} duration={2000} delay={0.2} />
-              </div>
-              <div className="text-white/60 text-xs">{MALL_STATS.totalStoresLabel}</div>
-            </motion.div>
-          </ScrollReveal>
-
-          <ScrollReveal delay={0.3}>
-            <motion.div
-              className="p-3 sm:p-4 lg:p-5 bg-white/5 backdrop-blur-sm border border-white/10 hover:border-accent/50 transition-all duration-300"
-              whileHover={{ scale: 1.03 }}
-            >
-              <div className="text-2xl sm:text-3xl font-bold text-accent mb-1">
-                <AnimatedCounter target={MALL_STATS.annualVisitors} duration={2000} delay={0.3} />
-              </div>
-              <div className="text-white/60 text-xs">{MALL_STATS.annualVisitorsLabel}</div>
-            </motion.div>
-          </ScrollReveal>
-
-          <ScrollReveal delay={0.4}>
-            <motion.div
-              className="p-3 sm:p-4 lg:p-5 bg-white/5 backdrop-blur-sm border border-white/10 hover:border-accent/50 transition-all duration-300"
-              whileHover={{ scale: 1.03 }}
-            >
-              <div className="text-2xl sm:text-3xl font-bold text-accent mb-1">
-                {MALL_STATS.established}
-              </div>
-              <div className="text-white/60 text-xs">{MALL_STATS.establishedLabel}</div>
-            </motion.div>
-          </ScrollReveal>
+        {/* Stats Grid */}
+        <div className="grid grid-cols-2 gap-3 mb-6">
+          {[
+            { target: MALL_STATS.totalArea, label: 'Square Feet', delay: 0.1 },
+            { target: MALL_STATS.totalStores, label: 'Retail Stores', delay: 0.2 },
+            { target: MALL_STATS.annualVisitors, label: 'Annual Visitors', delay: 0.3 },
+            { target: MALL_STATS.attractions, label: 'Major Attractions', delay: 0.4 },
+          ].map((stat, i) => (
+            <ScrollReveal key={i} delay={stat.delay}>
+              <motion.div
+                className="p-4 bg-white/[0.03] backdrop-blur-sm border border-white/10 hover:border-[#C9A962]/50 transition-all duration-300"
+                whileHover={{ scale: 1.03, borderColor: 'rgba(201,169,98,0.5)' }}
+              >
+                <div className="text-2xl font-bold text-[#C9A962] mb-0.5">
+                  <AnimatedCounter target={stat.target} duration={2000} delay={stat.delay} />
+                </div>
+                <div className="text-white/50 text-[10px] uppercase tracking-wider">{stat.label}</div>
+              </motion.div>
+            </ScrollReveal>
+          ))}
         </div>
 
+        {/* WEM vs Others comparison */}
         <ScrollReveal delay={0.5}>
-          <p className="text-white/50 leading-relaxed text-sm">
-            800+ stores · 20+ major attractions · 100+ dining options.
-            The ultimate destination for retail leasing, sponsorship & events.
-          </p>
+          <div className="bg-white/[0.03] border border-white/10 p-4">
+            <div className="text-[10px] text-white/40 uppercase tracking-widest mb-3">How WEM Compares</div>
+            {[
+              { name: 'West Edmonton Mall', visitors: '30M+', bar: 100, color: '#C9A962' },
+              { name: 'Mall of America', visitors: '40M', bar: 90, color: '#A0A0A0' },
+              { name: 'American Dream', visitors: '16M', bar: 53, color: '#A0A0A0' },
+            ].map((mall, i) => (
+              <div key={i} className="mb-2">
+                <div className="flex justify-between text-xs mb-1">
+                  <span style={{ color: mall.color }} className="font-medium">{mall.name}</span>
+                  <span className="text-white/50">{mall.visitors} visitors/yr</span>
+                </div>
+                <div className="h-1 bg-white/10 overflow-hidden">
+                  <motion.div
+                    className="h-full"
+                    style={{ backgroundColor: mall.color }}
+                    initial={{ width: 0 }}
+                    whileInView={{ width: `${mall.bar}%` }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.3 + i * 0.1, duration: 1 }}
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+        </ScrollReveal>
+
+        {/* Quote */}
+        <ScrollReveal delay={0.6}>
+          <div className="mt-4 pl-3 border-l border-[#C9A962]/40">
+            <p className="text-white/50 text-xs italic leading-relaxed">
+              "WEM isn't just where Canadians shop. It's where the country gathers."
+            </p>
+            <p className="text-[#C9A962]/70 text-[10px] mt-1">— Canadian Retail Report, 2024</p>
+          </div>
         </ScrollReveal>
       </div>
     </section>

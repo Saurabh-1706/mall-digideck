@@ -53,7 +53,7 @@ export default function AttractionsSection() {
                   images={[
                     { src: '/images/attractions.png',             alt: 'WEM Indoor Attractions Overview',  label: '🏟️ Inside WEM' },
                     { src: WEM_ATTRACTIONS_REAL[0],               alt: 'Galaxyland Indoor Theme Park',     label: '🎢 Galaxyland' },
-                    { src: WEM_ATTRACTIONS_REAL[1],               alt: 'World Waterpark Wave Pool',        label: '🌊 World Waterpark' },
+                    { src: '/images/waterpark-v2.png',            alt: 'World Waterpark Wave Pool',        label: '🌊 World Waterpark' },
                     { src: WEM_ATTRACTIONS_REAL[2],               alt: 'Ice Palace Skating Rink',          label: '⛸️ Ice Palace' },
                     { src: '/images/attractions-coaster.jpg',     alt: 'Amusement Rides & Attractions',   label: '🎡 Rides & Fun' },
                   ]}

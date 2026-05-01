@@ -54,10 +54,10 @@ export default function LuxurySection() {
                 <div className="h-[450px]">
                   <ImageCollage
                     images={[
-                      { src: '/images/luxury-main.jpg', alt: 'Luxury Retail', size: 'large' },
-                      { src: '/images/retail-float-1.jpg', alt: 'Premium Fashion', size: 'medium' },
-                      { src: '/images/retail-float-2.jpg', alt: 'High-End Brands', size: 'small' },
-                      { src: '/images/retail-float-3.jpg', alt: 'Designer Collections', size: 'small' },
+                      { src: '/images/luxury-v2.png', alt: 'Luxury Retail Wing', size: 'large' },
+                      { src: '/images/wem-real-luxury.jpg', alt: 'Premium Fashion', size: 'medium' },
+                      { src: '/images/retail.png', alt: 'Designer Collections', size: 'small' },
+                      { src: '/images/wem-real-corridor.jpg', alt: 'High-End Brands', size: 'small' },
                     ]}
                     layout="left-heavy"
                   />

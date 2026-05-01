@@ -23,7 +23,7 @@ export default function DiningSection() {
       {/* Full background image + video — cinematic like other sections */}
       <VideoBackground
         src={VIDEO_URLS.dining}
-        imageSrc={IMAGE_URLS.dining}
+        imageSrc="/images/dining-v2.png"
         overlay="bg-gradient-to-r from-black/90 via-black/70 to-black/50"
         kenBurns={true}
       >

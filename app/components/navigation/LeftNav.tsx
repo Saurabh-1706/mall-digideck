@@ -7,13 +7,15 @@ import { Menu, X, ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface LeftNavProps {
   activeSlide: number;
+  navLabels?: string[];
+  audienceBadge?: { label: string; color: string } | null;
 }
 
-export default function LeftNav({ activeSlide }: LeftNavProps) {
+export default function LeftNav({ activeSlide, navLabels, audienceBadge }: LeftNavProps) {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  const sectionLabels = [
+  const sectionLabels = navLabels ?? [
     'Overview',
     'Retail',
     'Luxury',
@@ -59,6 +61,18 @@ export default function LeftNav({ activeSlide }: LeftNavProps) {
               />
             </button>
           </div>
+
+          {/* Audience Badge */}
+          {audienceBadge && (
+            <div className="mb-4 px-1">
+              <div
+                className="text-[9px] uppercase tracking-widest px-2 py-1 border rounded-sm text-center leading-tight"
+                style={{ color: audienceBadge.color, borderColor: `${audienceBadge.color}40` }}
+              >
+                {audienceBadge.label}
+              </div>
+            </div>
+          )}
 
           {/* Navigation Dots */}
           <div className="flex flex-col gap-4">

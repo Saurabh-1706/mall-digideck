@@ -46,7 +46,7 @@ export default function EventsSection() {
           <div className="mb-12 h-[300px]">
             <ImageCollage
               images={[
-                { src: EVENTS_IMAGES[0], alt: 'Concerts & Live Shows', label: 'Concerts & Live Shows', size: 'large' },
+                { src: '/images/events-concert-v2.png', alt: 'Concerts & Live Shows', label: 'Concerts & Live Shows', size: 'large' },
                 { src: EVENTS_IMAGES[1], alt: 'Brand Activations', label: 'Brand Activations', size: 'medium' },
                 { src: EVENTS_IMAGES[2], alt: 'Corporate Events', label: 'Corporate Events', size: 'small' },
                 { src: EVENTS_IMAGES[3], alt: 'Conventions & Expos', label: 'Conventions & Expos', size: 'small' },

@@ -9,7 +9,7 @@ export default function HeroSection() {
     <section id="hero" className="relative h-screen w-full overflow-hidden">
       <VideoBackground
         src={VIDEO_URLS.hero}
-        imageSrc={IMAGE_URLS.hero[0]}
+        imageSrc="/images/hero-v2.png"
         overlay="bg-gradient-to-b from-black/60 via-black/40 to-black/80"
         kenBurns={true}
       >
