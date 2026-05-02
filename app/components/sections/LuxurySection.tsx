@@ -42,18 +42,6 @@ export default function LuxurySection({ isActive }: Props) {
         <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to right, #080808 0%, rgba(8,8,8,0.5) 40%, rgba(8,8,8,0.0) 100%)' }} />
       </div>
 
-      {/* Cinematic gold line — animates full width on slide enter */}
-      <div style={{
-        position: 'absolute',
-        top: '50%',
-        left: 0,
-        height: '1px',
-        background: 'linear-gradient(to right, transparent, rgba(200,169,110,0.4) 30%, rgba(200,169,110,0.15) 70%, transparent)',
-        width: entered ? '100%' : '0%',
-        transition: 'width 1.4s cubic-bezier(0.16,1,0.3,1) 0.2s',
-        zIndex: 3,
-        pointerEvents: 'none',
-      }} />
 
       {/* Left content */}
       <div style={{ position: 'relative', zIndex: 2, width: '55%', display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '80px 4% 80px 6%' }}>
