@@ -351,7 +351,7 @@ body::after {
    RESPONSIVE
 ═══════════════════════════════════════ */
 @media (max-width: 1199px) {
-  #bottom-nav .nav-tabs-inner button {
+  #top-nav .nav-tabs-inner button {
     font-size: 0.52rem;
     padding: 0 0.8rem;
     letter-spacing: 0.12em;
@@ -360,7 +360,7 @@ body::after {
 
 @media (max-width: 767px) {
   .display { line-height: 1.0; font-size: clamp(2.2rem, 8vw, 3.5rem) !important; }
-  #bottom-nav .nav-tabs-inner button {
+  #top-nav .nav-tabs-inner button {
     font-size: 0.48rem;
     padding: 0 0.6rem;
     letter-spacing: 0.08em;

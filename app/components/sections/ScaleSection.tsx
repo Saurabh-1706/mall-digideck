@@ -159,7 +159,7 @@ export default function ScaleSection({ isActive }: Props) {
 
       {/* Marquee */}
       <div style={{
-        position: 'absolute', bottom: '56px', left: 0, right: 0,
+        position: 'absolute', bottom: 0, left: 0, right: 0,
         borderTop: '1px solid #1e1e1e',
         background: 'rgba(8,8,8,0.8)',
         overflow: 'hidden',

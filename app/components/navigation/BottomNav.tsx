@@ -19,16 +19,16 @@ export default function BottomNav({ slides, current, onNavigate }: Props) {
 
   return (
     <nav
-      id="bottom-nav"
+      id="top-nav"
       style={{
         position: 'fixed',
-        bottom: 0,
+        top: 0,
         left: 0,
         right: 0,
         height: '56px',
         background: 'rgba(8,8,8,0.95)',
         backdropFilter: 'blur(24px)',
-        borderTop: '1px solid #1e1e1e',
+        borderBottom: '1px solid #1e1e1e',
         display: 'flex',
         alignItems: 'center',
         zIndex: 9000,
@@ -94,7 +94,8 @@ export default function BottomNav({ slides, current, onNavigate }: Props) {
                   padding: '0 1.1rem',
                   background: 'none',
                   border: 'none',
-                  borderTop: isActive ? '2px solid #C8A96E' : '2px solid transparent',
+                  borderBottom: isActive ? '2px solid #C8A96E' : '2px solid transparent',
+                  borderTop: 'none',
                   cursor: 'pointer',
                   fontFamily: "'DM Mono', monospace",
                   fontSize: '0.58rem',

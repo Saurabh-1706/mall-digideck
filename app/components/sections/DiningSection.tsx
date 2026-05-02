@@ -148,7 +148,7 @@ export default function DiningSection({ isActive }: Props) {
           borderLeft: 'none',
           background: 'rgba(8,8,8,0.9)',
           position: 'relative',
-          marginBottom: '56px',
+          marginBottom: 0,
         }}>
         <div style={{ position: 'absolute', left: '5%', top: 0, bottom: 0, width: '2px', background: 'rgba(200,169,110,0.4)' }} />
         <p style={{ fontFamily: "'Cormorant Garamond', serif", fontStyle: 'italic', fontSize: 'clamp(0.85rem, 1.4vw, 1.1rem)', color: '#a09080', lineHeight: 1.5 }}>

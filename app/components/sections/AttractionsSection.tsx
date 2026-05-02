@@ -66,7 +66,7 @@ export default function AttractionsSection({ isActive }: Props) {
         position: 'relative', zIndex: 2,
         width: '45%',
         display: 'flex', flexDirection: 'column', justifyContent: 'center',
-        padding: '80px 3% 76px 6%',
+        padding: '80px 3% 40px 6%',
       }}>
         <motion.p className="eyebrow"
           initial={{ opacity: 0 }} animate={entered ? { opacity: 1 } : { opacity: 0 }}

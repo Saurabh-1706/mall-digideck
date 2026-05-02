@@ -159,7 +159,7 @@ export default function HeroSection({ isActive, onNavigate }: Props) {
             transition={{ duration: 0.8, ease, delay: 1.3 }}
             style={{
               position: 'absolute',
-              bottom: '56px', left: 0, right: 0,
+              bottom: 0, left: 0, right: 0,
               zIndex: 3,
               background: 'rgba(8,8,8,0.7)',
               backdropFilter: 'blur(20px)',
