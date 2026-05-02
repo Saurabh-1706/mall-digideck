@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import ROICalculator from '../modules/ROICalculator';
 
 const ease = [0.16, 1, 0.3, 1] as const;
 
@@ -116,6 +117,7 @@ const HOTSPOT_POS = [
 export default function RetailSection({ isActive, onNavigate }: Props) {
   const [activeZone, setActiveZone] = useState<number | null>(null);
   const [entered, setEntered] = useState(false);
+  const [showROI, setShowROI] = useState(false);
 
   useEffect(() => {
     if (isActive) {
@@ -168,10 +170,19 @@ export default function RetailSection({ isActive, onNavigate }: Props) {
           ))}
         </div>
 
-        <motion.button initial={{ opacity: 0 }} animate={entered ? { opacity: 1 } : { opacity: 0 }} transition={{ delay: 0.8 }}
-          className="btn-gold" onClick={() => goTo(8)} style={{ alignSelf: 'flex-start', fontSize: '0.65rem' }}>
-          <span>Leasing Enquiry →</span>
-        </motion.button>
+        <motion.div initial={{ opacity: 0 }} animate={entered ? { opacity: 1 } : { opacity: 0 }} transition={{ delay: 0.8 }}
+          style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+          <button className="btn-gold" onClick={() => goTo(8)} style={{ alignSelf: 'flex-start', fontSize: '0.65rem' }}>
+            <span>Leasing Enquiry →</span>
+          </button>
+          <button
+            className="btn-gold-fill"
+            onClick={() => setShowROI(true)}
+            style={{ fontSize: '0.65rem', padding: '0.65rem 1.2rem', background: 'rgba(200,169,110,0.12)', border: '1px solid #C8A96E', color: '#C8A96E', cursor: 'pointer', letterSpacing: '0.12em', fontFamily: "'DM Mono', monospace" }}
+          >
+            ✦ Calculate My ROI
+          </button>
+        </motion.div>
       </div>
 
       {/* Right: interactive floor map */}
@@ -219,6 +230,11 @@ export default function RetailSection({ isActive, onNavigate }: Props) {
           </AnimatePresence>
         </div>
       </div>
+
+      {/* ROI Calculator overlay */}
+      <AnimatePresence>
+        {showROI && <ROICalculator onClose={() => setShowROI(false)} />}
+      </AnimatePresence>
     </div>
   );
 }

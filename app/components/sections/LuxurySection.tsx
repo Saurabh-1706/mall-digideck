@@ -36,9 +36,17 @@ export default function LuxurySection({ isActive }: Props) {
   return (
     <div style={{ position: 'relative', width: '100%', height: '100%', overflow: 'hidden', background: '#080808', display: 'flex' }}>
 
-      {/* Right full-bleed image */}
+      {/* Right full-bleed video/image */}
       <div style={{ position: 'absolute', right: 0, top: 0, width: '55%', height: '100%' }}>
-        <img src="/images/wem-real-luxury.jpg" alt="WEM Luxury Wing" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+        {/* TODO: replace src with official WEM luxury promo video */}
+        <video
+          autoPlay muted loop playsInline
+          style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
+        >
+          <source src="https://videos.pexels.com/video-files/3571264/3571264-hd_1920_1080_25fps.mp4" type="video/mp4" />
+        </video>
+        {/* Image fallback behind video */}
+        <img src="/images/wem-real-luxury.jpg" alt="WEM Luxury Wing" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', zIndex: -1 }} />
         <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to right, #080808 0%, rgba(8,8,8,0.5) 40%, rgba(8,8,8,0.0) 100%)' }} />
       </div>
 

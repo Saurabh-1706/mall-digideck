@@ -190,8 +190,14 @@ export default function EventsSection({ isActive, onNavigate }: Props) {
   return (
     <div style={{ position: 'relative', width: '100%', height: '100%', overflow: 'hidden', background: '#080808' }}>
       <div style={{ position: 'absolute', inset: 0 }}>
-        <img src="/images/events-concert-v2.png" alt="WEM Events" style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.14 }} />
-        <div style={{ position: 'absolute', inset: 0, background: 'rgba(8,8,8,0.84)' }} />
+        {/* TODO: replace with official WEM events/concert video */}
+        <video autoPlay muted loop playsInline
+          style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: 0.25 }}>
+          <source src="https://videos.pexels.com/video-files/2022397/2022397-hd_1920_1080_25fps.mp4" type="video/mp4" />
+        </video>
+        <img src="/images/events-concert-v2.png" alt="WEM Events"
+          style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: 0.14, zIndex: -1 }} />
+        <div style={{ position: 'absolute', inset: 0, background: 'rgba(8,8,8,0.78)' }} />
       </div>
 
       <div className="events-layout" style={{ position: 'relative', zIndex: 1, display: 'flex', height: '100%', padding: '80px 3% 30px 5%' }}>
