@@ -77,7 +77,7 @@ export default function AttractionsSection() {
               style={{
                 display: 'flex', alignItems: 'flex-start',
                 gap: '1rem', padding: '1rem 1.2rem',
-                background: 'none', border: 'none', cursor: 'pointer',
+                border: 'none', cursor: 'pointer',
                 textAlign: 'left',
                 borderLeft: i === active ? '2px solid #C8A96E' : '2px solid #1e1e1e',
                 borderBottom: '1px solid #1e1e1e',
