@@ -25,7 +25,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'brand is required' }, { status: 400 });
   }
 
-  const apiKey = process.env.ANTHROPIC_API_KEY;
+  const apiKey = process.env.OPENAI_API_KEY;
 
   // Graceful fallback if no key configured
   if (!apiKey) {
@@ -33,18 +33,21 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
-        'x-api-key': apiKey,
-        'anthropic-version': '2023-06-01',
-        'content-type': 'application/json',
+        'Authorization': `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'claude-opus-4-5',
+        model: 'gpt-4o',
         max_tokens: 600,
-        system: SYSTEM_PROMPT,
+        response_format: { type: 'json_object' },
         messages: [
+          {
+            role: 'system',
+            content: SYSTEM_PROMPT,
+          },
           {
             role: 'user',
             content: `Brand: ${brand}\nCategory: ${category}\nGoal: ${goal}`,
@@ -55,16 +58,13 @@ export async function POST(req: NextRequest) {
 
     if (!response.ok) {
       const err = await response.text();
-      console.error(`Anthropic API error ${response.status}:`, err);
+      console.error(`OpenAI API error ${response.status}:`, err);
       return NextResponse.json(fallback(brand, category, goal));
     }
 
     const data = await response.json();
-    const text = data.content?.[0]?.text || '{}';
-
-    // Strip any accidental markdown fences
-    const cleaned = text.replace(/```json|```/g, '').trim();
-    const parsed = JSON.parse(cleaned);
+    const text = data.choices?.[0]?.message?.content || '{}';
+    const parsed = JSON.parse(text);
 
     return NextResponse.json(parsed);
   } catch (err) {

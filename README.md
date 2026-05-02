@@ -20,7 +20,7 @@ This is a **9-slide interactive sales deck** built for West Edmonton Mall's comm
 | **UI** | React 19.2.4 + TypeScript |
 | **Styling** | Tailwind CSS 4.x + custom CSS variables |
 | **Animation** | Framer Motion 12 |
-| **AI** | Anthropic Claude (`claude-opus-4-5`) via `/api/personalize` |
+| **AI** | OpenAI GPT-4o via `/api/personalize` |
 | **Fonts** | Cormorant Garamond · DM Sans · DM Mono (Google Fonts) |
 
 ---
@@ -48,10 +48,10 @@ npm run dev
 
 ```bash
 # .env.local
-ANTHROPIC_API_KEY=sk-ant-api03-...
+OPENAI_API_KEY=sk-proj-...
 ```
 
-Get your key at [console.anthropic.com](https://console.anthropic.com) → API Keys.
+Get your key at [platform.openai.com/api-keys](https://platform.openai.com/api-keys).
 
 > **Without the key:** The AI slide still works — it falls back to template copy using the brand name. No errors, no broken UI.
 
@@ -82,14 +82,14 @@ If you see a **401 Unauthorized** error when visiting your Vercel URL, it's beca
 ### Add API Key to Vercel
 
 1. Vercel project → **Settings → Environment Variables**
-2. Add: `ANTHROPIC_API_KEY` = `sk-ant-api03-...`
+2. Add: `OPENAI_API_KEY` = `sk-proj-...`
 3. Redeploy for the change to take effect
 
 ---
 
 ## 5. AI Integration — The Brand Personalizer
 
-**Slide 7 features an AI-powered Brand Personalizer built on Anthropic Claude (`claude-opus-4-5`).**
+**Slide 7 features an AI-powered Brand Personalizer built on OpenAI GPT-4o.**
 
 The prospect enters their brand name, selects a category (Luxury Fashion, Technology, F&B, etc.) and a goal (Flagship, Pop-Up, Sponsorship, etc.), then hits **"Generate My Pitch →"**. In under 3 seconds, Claude returns a fully personalized WEM pitch — custom hook, opportunity paragraph, strategic fit analysis, and a call-to-action line.
 
@@ -135,7 +135,7 @@ Described in detail in Section 5 above. The output is a pitch written specifical
 
 | Tool | Purpose |
 |---|---|
-| **Anthropic Claude** | Brand Personalizer API (`/api/personalize`) |
+| **OpenAI GPT-4o** | Brand Personalizer API (`/api/personalize`) |
 | **DALL-E / Stable Diffusion** | Supplemental imagery where stock unavailable |
 | **Cursor / GitHub Copilot** | Development acceleration |
 
