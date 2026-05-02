@@ -4,6 +4,24 @@
 
 ---
 
+## The "I Need To Be Here" Moment
+
+**Slide 7 — AI Brand Personalizer**
+
+A prospect types their brand name, selects their category and goal. In under 3 seconds, GPT-4o generates a fully personalized WEM pitch — a custom hook, opportunity analysis with real WEM statistics, strategic positioning, and a call to action.
+
+This is not a demo feature. It replaces a 45-minute sales call with a 30-second interactive moment that makes the commercial opportunity feel personal and immediate. Every decision-maker who types their brand name sees a pitch written specifically for them.
+
+## Interactive Elements
+
+1. **Zone Map (Retail Slide):** Clickable SVG floor plan of WEM with 6 zones. Click any zone to see foot traffic, key tenants, and available space. An info panel slides in from the right.
+
+2. **Demographics Chart (Scale Slide):** Animated bar chart showing visitor age and origin data. Bars animate from 0 to final values on every slide entry.
+
+3. **AI Personalizer (Your Brand Slide):** GPT-4o generates a custom pitch for any brand in real time — hook, opportunity, strategic fit, and CTA — all in under 3 seconds.
+
+---
+
 ## 1. Overview
 
 This is a **9-slide interactive sales deck** built for West Edmonton Mall's commercial partnerships team. It replaces a traditional PDF deck or sales presentation with a browser-based experience where each section is a full-screen slide — navigated by click, keyboard arrow, or the persistent bottom navigation bar.

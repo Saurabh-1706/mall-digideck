@@ -2,8 +2,6 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import BottomNav from './components/navigation/BottomNav';
-import LoadingScreen from './components/LoadingScreen';
-import IntroVideo from './components/IntroVideo';
 import HeroSection from './components/sections/HeroSection';
 import ScaleSection from './components/sections/ScaleSection';
 import RetailSection from './components/sections/RetailSection';
@@ -32,10 +30,7 @@ const COMPONENTS = [
   PersonalizeSection, CTASection,
 ];
 
-type Stage = 'loading' | 'intro' | 'deck';
-
 export default function Home() {
-  const [stage, setStage] = useState<Stage>('loading');
   const [current, setCurrent] = useState(0);
   const [transitioning, setTransitioning] = useState(false);
   const prevSlide = useRef(0);
@@ -53,7 +48,6 @@ export default function Home() {
   // ── Keyboard navigation ──────────────────────────────
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (stage !== 'deck') return;
       if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
         goToSlide(Math.min(current + 1, SLIDES.length - 1));
       }
@@ -63,33 +57,19 @@ export default function Home() {
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [current, stage, goToSlide]);
+  }, [current, goToSlide]);
 
-  // ── goToSection custom event (from CTAs inside slides) ──
+  // ── goToSection / goToSlide custom events (from CTAs inside slides) ──
   useEffect(() => {
     const handler = (e: CustomEvent) => goToSlide(e.detail as number);
     window.addEventListener('goToSection', handler as EventListener);
-    return () => window.removeEventListener('goToSection', handler as EventListener);
-  }, [goToSlide]);
-
-  // ── goToSlide custom event (alias) ──────────────────
-  useEffect(() => {
-    const handler = (e: CustomEvent) => goToSlide(e.detail as number);
     window.addEventListener('goToSlide', handler as EventListener);
-    return () => window.removeEventListener('goToSlide', handler as EventListener);
+    return () => {
+      window.removeEventListener('goToSection', handler as EventListener);
+      window.removeEventListener('goToSlide', handler as EventListener);
+    };
   }, [goToSlide]);
 
-  // ── Stage: Loading ───────────────────────────────────
-  if (stage === 'loading') {
-    return <LoadingScreen onComplete={() => setStage('intro')} />;
-  }
-
-  // ── Stage: Intro Video ───────────────────────────────
-  if (stage === 'intro') {
-    return <IntroVideo onComplete={() => setStage('deck')} />;
-  }
-
-  // ── Stage: Slide Deck ────────────────────────────────
   return (
     <div style={{ position: 'fixed', inset: 0, background: '#080808', overflow: 'hidden' }}>
 
@@ -111,9 +91,7 @@ export default function Home() {
               transform: isActive
                 ? (transitioning ? 'scale(1.03)' : 'scale(1)')
                 : (wasActive ? 'scale(0.97)' : 'scale(1.03)'),
-              transition: transitioning
-                ? 'opacity 0.5s ease, transform 0.5s ease'
-                : 'opacity 0.5s ease, transform 0.5s ease',
+              transition: 'opacity 0.5s ease, transform 0.5s ease',
               zIndex: isActive ? 2 : (wasActive ? 1 : 0),
             }}
           >
@@ -122,7 +100,7 @@ export default function Home() {
         );
       })}
 
-      {/* Bottom nav — always on top */}
+      {/* Nav — always on top */}
       <BottomNav
         slides={SLIDES}
         current={current}
