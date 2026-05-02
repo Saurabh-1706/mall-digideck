@@ -1,40 +1,66 @@
 # 🏙️ West Edmonton Mall — Interactive Digideck
 
-> A cinematic, browser-based sales digideck built for North America's largest mall. Designed to impress prospective tenants, sponsors, and event partners with an immersive, video-first, non-linear presentation experience.
+> A cinematic, browser-based **slide deck** built for North America's largest mall. Designed to impress prospective tenants, sponsors, and event partners with an immersive, video-first, non-linear presentation experience that feels like a premium Digideck — not a website.
 
-**Live Demo:** _[Deploy to get URL — see Deployment section below]_
+**Live Demo:** _[Deploy to Vercel — see Deployment section below]_
 
 ---
 
-## ✨ Features
+## ✨ What Makes This Different
 
-### 🎬 Cinematic Presentation
-- **Full-screen video intro** with live WEM footage — no loading screens
-- **Scroll-triggered section transitions** with Framer Motion
-- **Ken Burns effect** on static images for motion-always feel
-- **Three.js gold particle cloud** as living background on key slides
+This is **not a scroll website**. It's a true slide deck engine — each section is a full-screen slide with cinematic entrance animations, triggered precisely when the slide becomes active. Navigation is click-driven with no scroll at all.
 
-### 🧭 Non-Linear Navigation
-- **Side dot navigation** — jump to any section instantly
-- **Top bar** with logo + persistent "Contact" CTA
-- **Keyboard support** for presentation mode
+---
 
-### 📊 Interactive Modules (Expandable Overlays)
-- **Leasing Module** — browse retail space categories, average sqft, foot traffic data, direct inquiry email links
-- **Sponsorship Module** — tiered partnership packages with pricing tiers and activation options
-- **Deep Integration** — these modules are seamlessly integrated throughout the presentation. They can be triggered not only from the final CTA section, but also directly from the **Retail**, **Luxury**, and **Events** sections, reducing friction to conversion.
+## 🧠 The "I Need To Be Here" Moment
 
-### 🗂️ 8 Immersive Sections
-| # | Section | Key Content |
-|---|---------|-------------|
-| 0 | **Entry / Intro** | Full-screen video, hero copy, gold CTA |
-| 1 | **Why WEM** | 4 stats, image collage (entrance, boulevard, interior) |
-| 2 | **Retail** | 800+ brands, category grid, video panel |
-| 3 | **Luxury Wing** | Premium brand showcase |
-| 4 | **Dining & Lifestyle** | 100+ restaurants, cinematic video backdrop |
-| 5 | **Beyond Shopping** | Galaxyland · Waterpark · Ice Palace · Marine Life image strip |
-| 6 | **Events** | Activations, corporate, concerts |
-| 7 | **CTA** | Leasing modal · Sponsorship modal · Event booking |
+**Slide 7 features an AI-powered Brand Personalizer.** The prospect enters their brand name, category, and goal. In under 3 seconds, Claude (Anthropic) generates a fully personalized pitch with WEM-specific statistics, strategic positioning, and a custom hook written for their exact business situation.
+
+This feature replaces a 45-minute sales call with a 30-second interactive experience that makes the commercial opportunity feel personal and immediate.
+
+### How It Works
+1. Prospect types their brand name (e.g. "Tesla", "Sephora", "Nike")
+2. Selects their category chip (Luxury Fashion, Technology, F&B, etc.)
+3. Selects their goal (Flagship, Pop-Up, Sponsorship, etc.)
+4. Hits **"Generate My Pitch →"**
+5. Claude returns: a bold **hook**, **opportunity** paragraph, **why WEM now** argument, and a **CTA line**
+
+### Setting Up the AI Feature
+
+**Step 1 — Get an Anthropic API Key:**
+- Go to [console.anthropic.com](https://console.anthropic.com)
+- Create an account → API Keys → Create key
+- Copy the key (starts with `sk-ant-...`)
+
+**Step 2 — Add to local development:**
+```bash
+# .env.local
+ANTHROPIC_API_KEY=sk-ant-api03-...
+```
+
+**Step 3 — Add to Vercel (production):**
+1. Go to your Vercel project dashboard
+2. Settings → Environment Variables
+3. Add: `ANTHROPIC_API_KEY` = `sk-ant-api03-...`
+4. Redeploy
+
+> **Graceful degradation:** If the API key is missing or the call fails, the feature silently falls back to template copy using the brand name. The slide still works — it just won't be AI-generated.
+
+---
+
+## 🗂️ 9 Immersive Slides
+
+| # | Slide | Key Content |
+|---|-------|-------------|
+| 0 | **Hero** | YouTube video BG, cinematic headline, stat strip |
+| 1 | **The Scale** | Animated counters, demographic bar charts |
+| 2 | **Retail** | Interactive SVG floor plan with 6 clickable zones |
+| 3 | **Luxury Wing** | Gold line sweep, brand grid, HNW stats |
+| 4 | **Dining** | 3-panel full-height images with hover reveal |
+| 5 | **Attractions** | 4-tab crossfade (Galaxyland/Waterpark/Ice/Sea Life) |
+| 6 | **Events** | SVG hotspot map with 5 venue cards |
+| 7 | **Your Brand Here** | AI-powered personalized pitch generator |
+| 8 | **Contact** | 3-tab: Retail Leasing / Sponsorship / Events |
 
 ---
 
@@ -44,91 +70,59 @@
 |---|---|
 | **Framework** | Next.js 16.2.4 (App Router) |
 | **UI** | React 19.2.4 + TypeScript |
-| **Styling** | Tailwind CSS 4.x |
-| **Animation** | Framer Motion 12 + GSAP 3 |
-| **3D Graphics** | Three.js (particle systems, WebGL) |
-| **Smooth Scroll** | Lenis |
-| **Icons** | Lucide React |
-| **Fonts** | Geist Sans + Geist Mono (next/font) |
+| **Styling** | Tailwind CSS 4.x + custom CSS |
+| **Animation** | Framer Motion 12 |
+| **AI** | Anthropic Claude (via `/api/personalize`) |
+| **Fonts** | Cormorant Garamond · DM Sans · DM Mono |
 
 ---
 
-## 🎨 Design System
+## 🎨 Design Tokens
 
-### Color Palette
 ```css
---primary:    #0A0A0A   /* Deep black background */
---accent:     #C9A962   /* WEM gold — all highlights, CTAs */
---accent-hover: #B8964E /* Darker gold on hover */
---surface:    #141414   /* Card / panel background */
---border:     #2A2A2A   /* Subtle separators */
---text-muted: #888888   /* Secondary text */
+--black:      #080808   /* Deep black — slide backgrounds */
+--gold:       #C8A96E   /* WEM gold — active states, CTAs, accents */
+--gold-light: #E2C898   /* Hover gold */
+--text:       #DDD5C4   /* Primary text */
+--muted:      #6A6050   /* Secondary / label text */
 ```
 
-### Typography
-- **Display**: Geist Sans Bold — section headlines, hero copy
-- **Body**: Geist Sans Regular — descriptions, stats
-- **Mono**: Geist Mono — labels, tracking text
-
-### Motion Principles
-- **Entrance**: `opacity 0→1` + `y 30→0` (ScrollReveal)
-- **Stagger**: 0.1–0.15s between sibling elements
-- **Parallax**: `useScroll` + `useTransform` for depth
-- **3D Particles**: Three.js `PointsMaterial` with additive blending
+**Typography:**
+- **Display** — Cormorant Garamond 300 (all headlines)
+- **Body** — DM Sans 300
+- **Labels / Eyebrows** — DM Mono uppercase, letter-spacing 0.2em
 
 ---
 
-## 🤖 AI-Generated Assets
-
-The following images were AI-generated using **DALL-E 3 / Midjourney** to represent WEM's brand vision:
-
-| File | Tool | Prompt Summary |
-|---|---|---|
-| `hero.png` | DALL-E 3 | Luxury mega-mall exterior, night, gold lighting, Gucci/Rolex stores |
-| `events.png` | DALL-E 3 | Live concert inside luxury mall atrium, Velvet Nights theme |
-| `dining.png` | DALL-E 3 | Fine dining restaurant inside mall, gold art deco interior |
-| `attractions.png` | Midjourney | Indoor mega-mall cross-section: waterpark + roller coaster + stores |
-| `logo.png` | DALL-E 3 | WEM monogram logo, gold on dark navy |
-
----
-
-## 🏗️ Architecture
+## 🏗️ Project Structure
 
 ```
 mall2/
 ├── app/
-│   ├── layout.tsx              # Root layout, metadata, Lenis provider
-│   ├── page.tsx                # Main digideck orchestrator (PresentationMode)
-│   ├── globals.css             # Design tokens, Tailwind config
-│   ├── components/
-│   │   ├── EntryScreen.tsx     # Full-screen video intro + CTA
-│   │   ├── PresentationMode.tsx # Section container with scroll snap
-│   │   ├── navigation/
-│   │   │   ├── SideNav.tsx     # Dot navigation (fixed left)
-│   │   │   └── TopBar.tsx      # Logo + contact bar (fixed top)
-│   │   ├── sections/
-│   │   │   ├── WhySection.tsx       # Slide 1: Stats + 4-image collage
-│   │   │   ├── RetailSection.tsx    # Slide 2: 800+ brands
-│   │   │   ├── LuxurySection.tsx    # Slide 3: Premium wing
-│   │   │   ├── DiningSection.tsx    # Slide 4: F&B showcase
-│   │   │   ├── AttractionsSection.tsx # Slide 5: Beyond Shopping
-│   │   │   ├── EventsSection.tsx    # Slide 6: Events & activations
-│   │   │   └── CTASection.tsx       # Slide 7: Convert + modals
-│   │   ├── modules/
-│   │   │   ├── LeasingModule.tsx    # Fullscreen leasing overlay
-│   │   │   └── SponsorshipModule.tsx # Fullscreen sponsorship overlay
-│   │   └── ui/
-│   │       ├── ImageCollage.tsx     # 5-layout image grid system
-│   │       ├── VideoBackground.tsx  # Reusable video/image bg
-│   │       ├── Hero3DBackground.tsx # Three.js gold particles
-│   │       ├── Section3DBackground.tsx # Three.js section particles
-│   │       ├── AnimatedCounter.tsx  # Count-up numbers
-│   │       └── ScrollReveal.tsx     # Intersection Observer wrapper
-│   └── lib/
-│       └── constants.ts         # All content data (copy, images, videos)
+│   ├── layout.tsx                    # Root layout, Google Fonts
+│   ├── page.tsx                      # Slide deck engine (state + transitions)
+│   ├── globals.css                   # Design tokens + all responsive CSS
+│   ├── api/
+│   │   └── personalize/route.ts      # Claude AI pitch generation endpoint
+│   └── components/
+│       ├── LoadingScreen.tsx         # WEM monogram + gold progress bar
+│       ├── IntroVideo.tsx            # Entry screen + cinematic intro video
+│       ├── navigation/
+│       │   └── BottomNav.tsx         # Top nav: logo · tabs · counter · arrows
+│       └── sections/
+│           ├── HeroSection.tsx       # Slide 0: YouTube BG + stat strip
+│           ├── ScaleSection.tsx      # Slide 1: Counters + bar charts
+│           ├── RetailSection.tsx     # Slide 2: SVG floor plan
+│           ├── LuxurySection.tsx     # Slide 3: Gold line + brand grid
+│           ├── DiningSection.tsx     # Slide 4: 3-panel hover reveal
+│           ├── AttractionsSection.tsx # Slide 5: 4-tab crossfade
+│           ├── EventsSection.tsx     # Slide 6: Hotspot map
+│           ├── PersonalizeSection.tsx # Slide 7: AI pitch generator
+│           └── CTASection.tsx        # Slide 8: Contact tabs
 └── public/
-    ├── images/                  # All local image assets
-    └── videos/                  # WEM promotional videos
+    ├── images/                       # All local image assets
+    │   └── new/                      # Curated attraction photography
+    └── videos/                       # WEM promotional videos
 ```
 
 ---
@@ -139,71 +133,65 @@ mall2/
 # Install dependencies
 npm install
 
+# Add environment variables
+cp .env.example .env.local
+# → edit .env.local and add ANTHROPIC_API_KEY
+
 # Start dev server
 npm run dev
 # → http://localhost:3000
-
-# Production build (for testing)
-npm run build && npm run start
 ```
 
 ---
 
 ## ☁️ Deployment (Vercel)
 
-### Option A: CLI (Fastest)
+### Quick Deploy
 ```bash
-# Install Vercel CLI (one-time)
 npm i -g vercel
-
-# Login
 vercel login
-
-# Deploy to production
 vercel --prod
 ```
 
-### Option B: GitHub → Vercel Dashboard
-1. Push to GitHub: `git push origin main`
-2. Go to [vercel.com/new](https://vercel.com/new)
-3. Import your repository
-4. Framework: **Next.js** (auto-detected)
+### GitHub → Vercel Dashboard
+1. Push: `git push origin main`
+2. Go to [vercel.com/new](https://vercel.com/new) → Import repo
+3. Framework: **Next.js** (auto-detected)
+4. Add environment variable: `ANTHROPIC_API_KEY`
 5. Click **Deploy** — live in ~2 minutes
 
-### Environment Variables
-No environment variables required — all content is static.
+### Required Environment Variables
+
+| Variable | Where to get it |
+|---|---|
+| `ANTHROPIC_API_KEY` | [console.anthropic.com](https://console.anthropic.com) → API Keys |
 
 ---
 
-## 📐 Content Management
+## 🧭 Navigation
 
-All copy, image paths, and video URLs are centralized in:
-
-```
-app/lib/constants.ts
-```
-
-To update content without touching components:
-- **Images**: Update `IMAGE_URLS`, `WEM_ATTRACTIONS_REAL`, `DINING_IMAGES`, etc.
-- **Videos**: Update `VIDEO_URLS.hero / retail / luxury / dining / attractions / events / cta`
-- **Stats**: Update `MALL_STATS`
-- **Contact**: Update `CONTACT_INFO`
-- **Leasing tiers**: Update `LEASING_PATHS`
-- **Sponsorship tiers**: Update `SPONSORSHIP_TIERS`
+| Method | Action |
+|---|---|
+| Click tab in nav bar | Jump to that slide |
+| `→` / `ArrowRight` key | Next slide |
+| `←` / `ArrowLeft` key | Previous slide |
+| Nav `→` arrow button | Next slide |
+| Nav `←` arrow button | Previous slide |
 
 ---
 
 ## 🔮 Business Conversion Paths
 
 ```
-Retail Leasing:    Hero → WhySection → RetailSection / LuxurySection (Direct CTA) → LeasingModule → Email
-Sponsorship:       Hero → EventsSection (Direct CTA) → SponsorshipModule → Email
-Event Booking:     Hero → EventsSection → CTASection → Book an Event → Email
+Retail Leasing:   Hero → Retail (zone map) → Contact (Leasing tab) → leasing@wem.ca
+Sponsorship:      Hero → Events (hotspot map) → Contact (Sponsorship tab) → partnerships@wem.ca
+Event Booking:    Hero → Events → Contact (Events tab) → events@wem.ca
+Brand Pitch:      Hero → Your Brand Here (AI pitch) → Contact → conversation
 ```
 
 ---
 
 ## 📄 License
 
-Built for West Edmonton Mall commercial presentation purposes.
-© 2025 West Edmonton Mall. All rights reserved.
+Built for West Edmonton Mall commercial presentation purposes.  
+© 2026 West Edmonton Mall. All rights reserved.

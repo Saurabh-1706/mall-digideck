@@ -59,10 +59,10 @@ export default function AttractionsSection({ isActive }: Props) {
   }, [isActive]);
 
   return (
-    <div style={{ position: 'relative', width: '100%', height: '100%', overflow: 'hidden', background: '#080808', display: 'flex' }}>
+    <div className="attractions-layout" style={{ position: 'relative', width: '100%', height: '100%', overflow: 'hidden', background: '#080808', display: 'flex' }}>
 
       {/* Left: tabs */}
-      <div style={{
+      <div className="attractions-tabs" style={{
         position: 'relative', zIndex: 2,
         width: '45%',
         display: 'flex', flexDirection: 'column', justifyContent: 'center',
@@ -123,7 +123,7 @@ export default function AttractionsSection({ isActive }: Props) {
       </div>
 
       {/* Right: crossfading image */}
-      <div style={{ position: 'absolute', right: 0, top: 0, width: '58%', height: '100%', zIndex: 1 }}>
+      <div className="attractions-image" style={{ position: 'absolute', right: 0, top: 0, width: '58%', height: '100%', zIndex: 1 }}>
         <AnimatePresence mode="wait">
           <motion.img
             key={active}

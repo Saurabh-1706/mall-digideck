@@ -66,7 +66,7 @@ export default function DiningSection({ isActive }: Props) {
       </div>
 
       {/* 3-panel cards — full height remaining */}
-      <div style={{ flex: 1, display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', minHeight: 0 }}>
+      <div className="dining-panels">
         {CARDS.map((card, i) => (
           <motion.div key={i}
             initial={{ opacity: 0, y: 30 }} animate={entered ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}

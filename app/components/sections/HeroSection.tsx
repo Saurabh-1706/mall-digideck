@@ -69,7 +69,7 @@ export default function HeroSection({ isActive, onNavigate }: Props) {
       <div style={{ position: 'absolute', inset: 0, zIndex: 1, background: 'linear-gradient(to top, rgba(8,8,8,0.9) 0%, transparent 50%)' }} />
 
       {/* ── Content ── */}
-      <div style={{
+      <div className="hero-content" style={{
         position: 'absolute', inset: 0, zIndex: 2,
         display: 'flex', flexDirection: 'column',
         justifyContent: 'center',
@@ -100,11 +100,11 @@ export default function HeroSection({ isActive, onNavigate }: Props) {
               transition={{ duration: 1, ease, delay: 0.5 }}
               style={{ marginBottom: '1.5rem' }}
             >
-              <div className="display" style={{ fontSize: 'clamp(3.5rem, 9vw, 8rem)', lineHeight: 0.92 }}>Where the</div>
-              <div className="display" style={{ fontSize: 'clamp(3.5rem, 9vw, 8rem)', lineHeight: 0.92 }}>
-                <em className="display-italic" style={{ fontSize: 'clamp(3.5rem, 9vw, 8rem)' }}>World</em>
+              <div className="display hero-h1" style={{ fontSize: 'clamp(3.5rem, 9vw, 8rem)', lineHeight: 0.92 }}>Where the</div>
+              <div className="display hero-h1" style={{ fontSize: 'clamp(3.5rem, 9vw, 8rem)', lineHeight: 0.92 }}>
+                <em className="display-italic hero-h1" style={{ fontSize: 'clamp(3.5rem, 9vw, 8rem)' }}>World</em>
               </div>
-              <div className="display" style={{ fontSize: 'clamp(3.5rem, 9vw, 8rem)', lineHeight: 0.92 }}>Shops.</div>
+              <div className="display hero-h1" style={{ fontSize: 'clamp(3.5rem, 9vw, 8rem)', lineHeight: 0.92 }}>Shops.</div>
             </motion.h1>
           )}
         </AnimatePresence>
@@ -137,6 +137,7 @@ export default function HeroSection({ isActive, onNavigate }: Props) {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, ease, delay: 1.0 }}
+              className="hero-ctas"
               style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}
             >
               <button className="btn-gold" onClick={() => goTo(1)}>
@@ -157,6 +158,7 @@ export default function HeroSection({ isActive, onNavigate }: Props) {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease, delay: 1.3 }}
+            className="stat-grid"
             style={{
               position: 'absolute',
               bottom: 0, left: 0, right: 0,
@@ -164,8 +166,6 @@ export default function HeroSection({ isActive, onNavigate }: Props) {
               background: 'rgba(8,8,8,0.7)',
               backdropFilter: 'blur(20px)',
               borderTop: '1px solid #1e1e1e',
-              display: 'grid',
-              gridTemplateColumns: 'repeat(4, 1fr)',
               padding: '1.2rem 3rem',
             }}
           >

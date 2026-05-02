@@ -106,7 +106,7 @@ export default function ScaleSection({ isActive }: Props) {
       <div style={{ position: 'relative', zIndex: 1, padding: '80px 5% 0', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '2rem' }}>
 
         {/* Header row */}
-        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '4rem', flexWrap: 'wrap' }}>
+        <div className="scale-header" style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '4rem', flexWrap: 'wrap' }}>
           <div style={{ maxWidth: '480px' }}>
             <motion.p className="eyebrow"
               initial={{ opacity: 0 }} animate={entered ? { opacity: 1 } : { opacity: 0 }}
@@ -125,7 +125,7 @@ export default function ScaleSection({ isActive }: Props) {
           </div>
 
           {/* Counters */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', flex: '1', maxWidth: '480px' }}>
+          <div className="counter-grid" style={{ gap: '1rem', flex: '1' }}>
             {COUNTERS.map((s, i) => (
               <motion.div key={i}
                 initial={{ opacity: 0, y: 20 }} animate={entered ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
@@ -141,7 +141,7 @@ export default function ScaleSection({ isActive }: Props) {
         </div>
 
         {/* Demographic bars */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', maxWidth: '960px' }}>
+        <div className="demo-bars-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', maxWidth: '960px' }}>
           <motion.div
             initial={{ opacity: 0, x: -20 }} animate={entered ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }}
             transition={{ duration: 0.8, ease, delay: 0.5 }}>

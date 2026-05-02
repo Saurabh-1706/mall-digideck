@@ -72,7 +72,7 @@ export default function PersonalizeSection({ onNavigate }: Props) {
         <div style={{ position: 'absolute', bottom: '20%', right: '10%', width: '300px', height: '300px', background: 'radial-gradient(circle, rgba(200,169,110,0.04) 0%, transparent 70%)', borderRadius: '50%' }} />
       </div>
 
-      <div style={{ position: 'relative', zIndex: 1, width: '100%', maxWidth: '860px', padding: '80px 5% 40px', overflowY: 'auto', maxHeight: '100vh' }}>
+      <div className="personalize-inner" style={{ position: 'relative', zIndex: 1, width: '100%', maxWidth: '860px', padding: '80px 5% 40px', overflowY: 'auto', maxHeight: '100vh' }}>
 
         <AnimatePresence mode="wait">
           {!result ? (

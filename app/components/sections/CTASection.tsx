@@ -119,6 +119,7 @@ export default function CTASection({ isActive }: Props) {
           <motion.div
             initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, ease }}
+            className="cta-tab-content"
             style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem' }}
           >
             {LEASING.map((l, i) => (
@@ -156,6 +157,7 @@ export default function CTASection({ isActive }: Props) {
           <motion.div
             initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, ease }}
+            className="cta-tab-content"
             style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem' }}
           >
             {SPONSORSHIP.map((s, i) => (
@@ -189,7 +191,7 @@ export default function CTASection({ isActive }: Props) {
             initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, ease }}
           >
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.8rem', marginBottom: '1.5rem' }}>
+            <div className="cta-tab-content" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.8rem', marginBottom: '1.5rem' }}>
               {VENUES.map((v, i) => (
                 <div
                   key={i}

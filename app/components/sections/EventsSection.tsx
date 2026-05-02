@@ -194,9 +194,9 @@ export default function EventsSection({ isActive, onNavigate }: Props) {
         <div style={{ position: 'absolute', inset: 0, background: 'rgba(8,8,8,0.84)' }} />
       </div>
 
-      <div style={{ position: 'relative', zIndex: 1, display: 'flex', height: '100%', padding: '80px 3% 30px 5%' }}>
+      <div className="events-layout" style={{ position: 'relative', zIndex: 1, display: 'flex', height: '100%', padding: '80px 3% 30px 5%' }}>
         {/* Left */}
-        <div style={{ width: '44%', display: 'flex', flexDirection: 'column', justifyContent: 'center', paddingRight: '3%' }}>
+        <div className="events-left" style={{ width: '44%', display: 'flex', flexDirection: 'column', justifyContent: 'center', paddingRight: '3%' }}>
           <motion.p className="eyebrow" initial={{ opacity: 0 }} animate={entered ? { opacity: 1 } : { opacity: 0 }} transition={{ duration: 0.6 }} style={{ marginBottom: '0.8rem' }}>
             Events & Platform
           </motion.p>
@@ -244,7 +244,7 @@ export default function EventsSection({ isActive, onNavigate }: Props) {
         </div>
 
         {/* Right: Sponsorship map */}
-        <div style={{ width: '56%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+        <div className="events-right" style={{ width: '56%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
           <p className="eyebrow" style={{ marginBottom: '0.5rem', textAlign: 'center', fontSize: '0.55rem' }}>
             Sponsorship Activation Map — click a venue
           </p>

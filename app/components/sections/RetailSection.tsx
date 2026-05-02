@@ -139,7 +139,7 @@ export default function RetailSection({ isActive, onNavigate }: Props) {
       </div>
 
       {/* Left */}
-      <div style={{ position: 'relative', zIndex: 1, width: '48%', display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '80px 3% 80px 5%', overflow: 'hidden' }}>
+      <div className="retail-left-panel" style={{ position: 'relative', zIndex: 1, width: '48%', display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '80px 3% 80px 5%', overflow: 'hidden' }}>
         <motion.p className="eyebrow" initial={{ opacity: 0 }} animate={entered ? { opacity: 1 } : { opacity: 0 }} transition={{ duration: 0.6 }} style={{ marginBottom: '0.8rem' }}>
           Retail Environment
         </motion.p>
@@ -154,7 +154,7 @@ export default function RetailSection({ isActive, onNavigate }: Props) {
         </motion.p>
 
         {/* Category grid */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '0.6rem', marginBottom: '1.5rem' }}>
+        <div className="category-grid" style={{ marginBottom: '1.5rem' }}>
           {CATEGORIES.map((cat, i) => (
             <motion.div key={i}
               initial={{ opacity: 0, y: 20 }} animate={entered ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
@@ -175,7 +175,7 @@ export default function RetailSection({ isActive, onNavigate }: Props) {
       </div>
 
       {/* Right: interactive floor map */}
-      <div style={{ position: 'relative', width: '52%', zIndex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '72px 2% 76px 1%' }}>
+      <div className="retail-map-panel" style={{ position: 'relative', width: '52%', zIndex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '72px 2% 76px 1%' }}>
         <p className="eyebrow" style={{ marginBottom: '0.5rem', textAlign: 'center', fontSize: '0.55rem' }}>
           West Edmonton Mall · Interactive Floor Plan
         </p>
