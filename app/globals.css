@@ -156,23 +156,11 @@ body {
 }
 
 /* ═══════════════════════════════════════
-   FULL-SCREEN SNAP CONTAINER
+   SLIDE DECK ENGINE
 ═══════════════════════════════════════ */
-.snap-container {
-  height: 100vh;
-  overflow-y: scroll;
-  overflow-x: hidden;
-  scroll-snap-type: y mandatory;
-  scroll-behavior: smooth;
-}
-.snap-container::-webkit-scrollbar { display: none; }
-.snap-section {
-  scroll-snap-align: start;
-  scroll-snap-stop: always;
-  height: 100vh;
-  overflow: hidden;
-  position: relative;
-}
+/* All slides are position:absolute stacked in page.tsx;
+   no scroll container needed. Body/html stay overflow:hidden. */
+.nav-tabs-inner::-webkit-scrollbar { display: none; }
 
 /* ═══════════════════════════════════════
    GRAIN OVERLAY (pseudo on body)
@@ -362,9 +350,21 @@ body::after {
 /* ═══════════════════════════════════════
    RESPONSIVE
 ═══════════════════════════════════════ */
+@media (max-width: 1199px) {
+  #bottom-nav .nav-tabs-inner button {
+    font-size: 0.52rem;
+    padding: 0 0.8rem;
+    letter-spacing: 0.12em;
+  }
+}
+
 @media (max-width: 767px) {
-  .snap-section { scroll-snap-stop: always; }
-  .display { line-height: 1.0; }
+  .display { line-height: 1.0; font-size: clamp(2.2rem, 8vw, 3.5rem) !important; }
+  #bottom-nav .nav-tabs-inner button {
+    font-size: 0.48rem;
+    padding: 0 0.6rem;
+    letter-spacing: 0.08em;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

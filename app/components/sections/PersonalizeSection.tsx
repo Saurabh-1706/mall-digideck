@@ -5,6 +5,11 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 const ease = [0.16, 1, 0.3, 1] as const;
 
+interface Props {
+  isActive?: boolean;
+  onNavigate?: (idx: number) => void;
+}
+
 const CATEGORIES = [
   'Luxury Fashion', 'Beauty & Wellness', 'Technology',
   'F&B / Restaurant', 'Entertainment', 'Sports',
@@ -22,7 +27,7 @@ interface PitchResult {
   cta: string;
 }
 
-export default function PersonalizeSection() {
+export default function PersonalizeSection({ onNavigate }: Props) {
   const [brand, setBrand] = useState('');
   const [category, setCategory] = useState('');
   const [goal, setGoal] = useState('');
@@ -52,6 +57,11 @@ export default function PersonalizeSection() {
   };
 
   const handleReset = () => { setResult(null); setBrand(''); setCategory(''); setGoal(''); setError(''); };
+
+  const goTo = (idx: number) => {
+    if (onNavigate) onNavigate(idx);
+    else window.dispatchEvent(new CustomEvent('goToSlide', { detail: idx }));
+  };
 
   return (
     <div style={{ position: 'relative', width: '100%', height: '100%', overflow: 'hidden', background: '#080808', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -246,7 +256,7 @@ export default function PersonalizeSection() {
                 </p>
                 <div style={{ display: 'flex', gap: '0.7rem', flexShrink: 0 }}>
                   <button className="btn-gold" style={{ fontSize: '0.65rem', padding: '0.7rem 1.4rem' }}
-                    onClick={() => window.dispatchEvent(new CustomEvent('goToSection', { detail: 8 }))}
+                    onClick={() => goTo(8)}
                   ><span>Start a Conversation</span></button>
                   <button className="btn-outline" style={{ fontSize: '0.65rem', padding: '0.7rem 1.4rem' }} onClick={handleReset}>
                     Try Another Brand

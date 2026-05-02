@@ -1,9 +1,14 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const ease = [0.16, 1, 0.3, 1] as const;
+
+interface Props {
+  isActive?: boolean;
+  onNavigate?: (idx: number) => void;
+}
 
 const EVENT_TYPES = [
   { icon: '🎤', name: 'Concerts', capacity: '15K seats' },
@@ -163,8 +168,24 @@ const HOTSPOT_SVG_POS = [
   { top: '47%', left: '88%' },
 ];
 
-export default function EventsSection() {
+export default function EventsSection({ isActive, onNavigate }: Props) {
   const [activeHotspot, setActiveHotspot] = useState<number | null>(null);
+  const [entered, setEntered] = useState(false);
+
+  useEffect(() => {
+    if (isActive) {
+      const t = setTimeout(() => setEntered(true), 80);
+      return () => clearTimeout(t);
+    } else {
+      setEntered(false);
+      setActiveHotspot(null);
+    }
+  }, [isActive]);
+
+  const goTo = (idx: number) => {
+    if (onNavigate) onNavigate(idx);
+    else window.dispatchEvent(new CustomEvent('goToSlide', { detail: idx }));
+  };
 
   return (
     <div style={{ position: 'relative', width: '100%', height: '100%', overflow: 'hidden', background: '#080808' }}>
@@ -176,7 +197,7 @@ export default function EventsSection() {
       <div style={{ position: 'relative', zIndex: 1, display: 'flex', height: '100%', padding: '80px 3% 30px 5%' }}>
         {/* Left */}
         <div style={{ width: '44%', display: 'flex', flexDirection: 'column', justifyContent: 'center', paddingRight: '3%' }}>
-          <motion.p className="eyebrow" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} style={{ marginBottom: '0.8rem' }}>
+          <motion.p className="eyebrow" initial={{ opacity: 0 }} animate={entered ? { opacity: 1 } : { opacity: 0 }} transition={{ duration: 0.6 }} style={{ marginBottom: '0.8rem' }}>
             Events & Platform
           </motion.p>
           <motion.h2
@@ -197,7 +218,7 @@ export default function EventsSection() {
 
           <div style={{ display: 'flex', gap: '1rem', marginBottom: '1.5rem', flexWrap: 'wrap' }}>
             {[{ val: '300+', label: 'Annual Events' }, { val: '20K+', label: 'Max Capacity' }, { val: '5', label: 'Distinct Venues' }].map((s, i) => (
-              <motion.div key={i} initial={{ opacity: 0, y: 15 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1, duration: 0.6, ease }}
+              <motion.div key={i} initial={{ opacity: 0, y: 15 }} animate={entered ? { opacity: 1, y: 0 } : { opacity: 0, y: 15 }} transition={{ delay: 0.35 + i * 0.1, duration: 0.6, ease }}
                 style={{ padding: '0.9rem 1.1rem', border: '1px solid #2a2a2a', background: 'rgba(20,20,20,0.6)', backdropFilter: 'blur(10px)', minWidth: '80px' }}>
                 <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: '1.8rem', color: '#C8A96E', fontWeight: 300 }}>{s.val}</div>
                 <div className="eyebrow" style={{ fontSize: '0.52rem' }}>{s.label}</div>
@@ -207,7 +228,7 @@ export default function EventsSection() {
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '0.5rem', marginBottom: '1.5rem' }}>
             {EVENT_TYPES.map((evt, i) => (
-              <motion.div key={i} initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ delay: i * 0.08, duration: 0.5, ease }}
+              <motion.div key={i} initial={{ opacity: 0, scale: 0.95 }} animate={entered ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.95 }} transition={{ delay: 0.5 + i * 0.08, duration: 0.5, ease }}
                 style={{ padding: '0.7rem', border: '1px solid #1e1e1e', background: 'rgba(14,14,14,0.8)', backdropFilter: 'blur(10px)' }}>
                 <div style={{ fontSize: '1rem', marginBottom: '0.25rem' }}>{evt.icon}</div>
                 <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '0.7rem', color: '#e8e0d0', fontWeight: 500, marginBottom: '0.1rem' }}>{evt.name}</div>
@@ -217,8 +238,8 @@ export default function EventsSection() {
           </div>
 
           <div style={{ display: 'flex', gap: '0.8rem' }}>
-            <button className="btn-gold" style={{ fontSize: '0.65rem', padding: '0.7rem 1.4rem' }} onClick={() => window.dispatchEvent(new CustomEvent('goToSection', { detail: 8 }))}><span>Book a Venue</span></button>
-            <button className="btn-outline" style={{ fontSize: '0.65rem', padding: '0.7rem 1.4rem' }} onClick={() => window.dispatchEvent(new CustomEvent('goToSection', { detail: 7 }))}>Your Activation Here</button>
+            <button className="btn-gold" style={{ fontSize: '0.65rem', padding: '0.7rem 1.4rem' }} onClick={() => goTo(8)}><span>Book a Venue</span></button>
+            <button className="btn-outline" style={{ fontSize: '0.65rem', padding: '0.7rem 1.4rem' }} onClick={() => goTo(7)}>Your Activation Here</button>
           </div>
         </div>
 

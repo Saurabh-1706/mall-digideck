@@ -5,6 +5,11 @@ import { motion } from 'framer-motion';
 
 const ease = [0.16, 1, 0.3, 1] as const;
 
+interface Props {
+  isActive?: boolean;
+  onNavigate?: (idx: number) => void;
+}
+
 const TABS = ['Retail Leasing', 'Sponsorship', 'Events & Venues'] as const;
 type Tab = typeof TABS[number];
 
@@ -64,7 +69,7 @@ const VENUES = [
   { name: 'Galaxyland', capacity: '3,000', type: 'Corporate events, Team days' },
 ];
 
-export default function CTASection() {
+export default function CTASection({ isActive }: Props) {
   const [activeTab, setActiveTab] = useState<Tab>('Retail Leasing');
 
   return (
