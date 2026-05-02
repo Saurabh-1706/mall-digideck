@@ -1,42 +1,50 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+const SYSTEM_PROMPT = `You are a senior commercial real estate pitch specialist for West Edmonton Mall (WEM), North America's largest mall with 32M annual visitors, 5.3M sq ft, 800+ stores, and 20+ world-class attractions.
+Given a brand name, category, and goal — write a personalized 4-part pitch.
+Return ONLY valid JSON, no markdown:
+{ "hook", "opportunity", "pitch", "cta" }
+hook: one powerful sentence (15–20 words) creating an I-need-to-be-here moment
+opportunity: 2–3 sentences with WEM stats specific to this brand/category
+pitch: 2–3 sentences on strategic fit between this brand, category, goal and WEM
+cta: one confident next-step sentence`;
+
+function fallback(brand: string, category: string, goal: string) {
+  return {
+    hook: `${brand} belongs at the centre of North America's most visited commercial destination.`,
+    opportunity: `West Edmonton Mall draws 32 million annual visitors across 5.3 million square feet of premium retail, dining, and entertainment. With 100,000+ daily visitors and an average dwell time of 3.2 hours, WEM delivers sustained brand exposure no other Canadian venue can match.`,
+    pitch: `For a ${category} brand pursuing ${goal}, WEM is the definitive launchpad. The mall's audience skews 38% millennial with above-average household incomes — precisely the demographic ${brand} needs. Whether through a flagship lease, pop-up, or sponsored activation, a presence here signals immediate category leadership.`,
+    cta: `Contact our partnerships team this week and let's design your WEM presence.`,
+  };
+}
+
 export async function POST(req: NextRequest) {
   const { brand, category, goal } = await req.json();
 
-  const apiKey = process.env.OPENAI_API_KEY;
+  if (!brand) {
+    return NextResponse.json({ error: 'brand is required' }, { status: 400 });
+  }
 
-  // Fallback copy if no API key
+  const apiKey = process.env.ANTHROPIC_API_KEY;
+
+  // Graceful fallback if no key configured
   if (!apiKey) {
-    return NextResponse.json({
-      hook: `${brand} belongs at the centre of North America's most powerful commercial platform.`,
-      opportunity: `West Edmonton Mall draws 30 million visitors annually across 5.3 million square feet of premium retail, dining, and entertainment space. With 100,000+ daily foot traffic and a captured audience that spends an average of 3.2 hours per visit, WEM delivers unmatched brand exposure. As ${brand} targets growth in Canada's most dynamic retail market, WEM offers the scale, demographic reach, and cultural cachet no other venue can match.`,
-      pitch: `For a ${category} brand with a goal to ${goal}, WEM represents the ultimate launchpad. The mall's visitor base skews 38% millennial with above-average household incomes — precisely the audience ${brand} needs to convert. Whether through a flagship lease, a high-visibility pop-up, or a sponsored activation inside one of 20+ world-class attractions, ${brand}'s presence here sends an immediate signal of category leadership.`,
-      cta: `Let's build the business case together. Contact our partnerships team this week.`,
-    });
+    return NextResponse.json(fallback(brand, category, goal));
   }
 
   try {
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${apiKey}`,
-        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+        'content-type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-4o',
-        max_tokens: 800,
-        response_format: { type: 'json_object' },
+        model: 'claude-opus-4-5',
+        max_tokens: 600,
+        system: SYSTEM_PROMPT,
         messages: [
-          {
-            role: 'system',
-            content: `You are a senior commercial real estate pitch specialist for West Edmonton Mall — North America's largest mall with 5.3M sq ft, 30M+ annual visitors, 800+ stores, and 20+ world-class attractions.
-Given brand name, category, and goal — write a hyper-personalized, compelling 4-part pitch.
-Return ONLY valid JSON with these keys:
-- hook: single powerful sentence creating an "I-need-to-be-here" moment (make it feel personal to the brand)
-- opportunity: 2-3 sentences with concrete WEM stats woven in naturally
-- pitch: 2-3 sentences on the strategic fit between this brand, category, goal and WEM
-- cta: one confident, urgent call-to-action sentence`,
-          },
           {
             role: 'user',
             content: `Brand: ${brand}\nCategory: ${category}\nGoal: ${goal}`,
@@ -47,22 +55,20 @@ Return ONLY valid JSON with these keys:
 
     if (!response.ok) {
       const err = await response.text();
-      throw new Error(`OpenAI API error ${response.status}: ${err}`);
+      console.error(`Anthropic API error ${response.status}:`, err);
+      return NextResponse.json(fallback(brand, category, goal));
     }
 
     const data = await response.json();
-    const text = data.choices?.[0]?.message?.content || '{}';
-    const parsed = JSON.parse(text);
+    const text = data.content?.[0]?.text || '{}';
+
+    // Strip any accidental markdown fences
+    const cleaned = text.replace(/```json|```/g, '').trim();
+    const parsed = JSON.parse(cleaned);
 
     return NextResponse.json(parsed);
   } catch (err) {
     console.error('Personalize API error:', err);
-    // Graceful fallback
-    return NextResponse.json({
-      hook: `${brand} belongs at the centre of North America's most powerful commercial platform.`,
-      opportunity: `West Edmonton Mall draws 30 million visitors annually across 5.3 million square feet. With 100,000+ daily visitors and an average dwell time of 3.2 hours, WEM delivers the kind of sustained brand exposure that transforms awareness into action. This is where ${brand}'s next chapter begins.`,
-      pitch: `A ${category} brand pursuing ${goal} couldn't find a more strategically aligned home. WEM's audience skews 38% millennial, high-income, and actively seeking premium experiences — a perfect match for ${brand}'s positioning. The property's media reach of 50M+ annually turns every activation into a national moment.`,
-      cta: `Contact our partnerships team today and let's design your WEM presence.`,
-    });
+    return NextResponse.json(fallback(brand, category, goal));
   }
 }
