@@ -2,137 +2,180 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import Image from 'next/image';
-import { Menu, X } from 'lucide-react';
 
-export default function TopBar() {
+interface Section { id: string; label: string; }
+interface Props {
+  sections: Section[];
+  activeSection: number;
+  onSectionClick: (idx: number) => void;
+}
+
+export default function TopBar({ sections, activeSection, onSectionClick }: Props) {
   const [scrolled, setScrolled] = useState(false);
-  const [progress, setProgress] = useState(0);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-  const sectionLabels = [
-    'Overview',
-    'Retail',
-    'Luxury',
-    'Dining',
-    'Attractions',
-    'Events',
-    'Contact',
-  ];
-
-  const handleNavClick = (index: number) => {
-    window.dispatchEvent(new CustomEvent('goToSlide', { detail: index }));
-    setMobileMenuOpen(false);
-  };
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => {
-      const scrollY = window.scrollY;
-      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-      const scrollPercent = (scrollY / docHeight) * 100;
-      
-      setScrolled(scrollY > 100);
-      setProgress(scrollPercent);
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    const container = document.querySelector('.snap-container');
+    if (!container) return;
+    const onScroll = () => setScrolled(container.scrollTop > 60);
+    container.addEventListener('scroll', onScroll, { passive: true });
+    return () => container.removeEventListener('scroll', onScroll);
   }, []);
 
   return (
-    <motion.header
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      transition={{ duration: 0.6, ease: 'easeOut' }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        scrolled || mobileMenuOpen
-          ? 'bg-primary/95 backdrop-blur-md border-b border-border'
-          : 'bg-transparent'
-      }`}
-    >
-      {/* Progress Bar */}
-      <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-border/30">
-        <motion.div 
-          className="h-full bg-gradient-to-r from-accent to-accent-hover"
-          style={{ width: `${progress}%` }}
-        />
+    <header style={{
+      position: 'fixed', top: 0, left: 0, right: 0,
+      zIndex: 100,
+      background: scrolled ? 'rgba(8,8,8,0.92)' : 'transparent',
+      backdropFilter: scrolled ? 'blur(20px)' : 'none',
+      borderBottom: scrolled ? '1px solid #1e1e1e' : 'none',
+      transition: 'background 0.4s ease, backdrop-filter 0.4s ease, border-color 0.4s ease',
+      padding: '0 2rem',
+      display: 'flex',
+      alignItems: 'center',
+      height: '64px',
+    }}>
+      {/* Logo */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', cursor: 'pointer' }}
+        onClick={() => onSectionClick(0)}>
+        <div style={{
+          border: '1px solid #C8A96E',
+          padding: '0.25rem 0.6rem',
+          fontFamily: "'Cormorant Garamond', serif",
+          fontSize: '1.1rem',
+          fontWeight: 300,
+          letterSpacing: '0.2em',
+          color: '#C8A96E',
+        }}>
+          WEM
+        </div>
+        <span style={{
+          fontFamily: "'DM Mono', monospace",
+          fontSize: '0.6rem',
+          letterSpacing: '0.2em',
+          textTransform: 'uppercase',
+          color: '#706860',
+          display: 'none',
+        }} className="wem-wordmark">
+          West Edmonton Mall
+        </span>
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-        {/* Logo */}
-        <div className="flex items-center gap-3">
-          <button 
-            onClick={() => handleNavClick(0)}
-            className="relative w-12 h-12 cursor-pointer hover:scale-105 transition-transform"
+      {/* Section tabs (desktop) */}
+      <nav style={{
+        flex: 1,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: '0.15rem',
+      }} className="desktop-nav">
+        {sections.map((sec, i) => (
+          <button
+            key={sec.id}
+            onClick={() => onSectionClick(i)}
+            style={{
+              background: 'none',
+              border: 'none',
+              cursor: 'pointer',
+              padding: '0.4rem 0.75rem',
+              fontFamily: "'DM Mono', monospace",
+              fontSize: '0.6rem',
+              letterSpacing: '0.18em',
+              textTransform: 'uppercase',
+              color: i === activeSection ? '#C8A96E' : '#706860',
+              borderBottom: i === activeSection ? '1px solid #C8A96E' : '1px solid transparent',
+              transition: 'color 0.2s ease, border-color 0.2s ease',
+              whiteSpace: 'nowrap',
+            }}
+            onMouseEnter={e => { if (i !== activeSection) (e.currentTarget as HTMLElement).style.color = '#e8e0d0'; }}
+            onMouseLeave={e => { if (i !== activeSection) (e.currentTarget as HTMLElement).style.color = '#706860'; }}
           >
-            <Image
-              src="/images/logo.png"
-              alt="WEM Logo"
-              fill
-              className="object-contain"
-            />
+            {sec.label}
           </button>
-          <div className="hidden sm:block h-6 w-px bg-border" />
-          <div className="hidden sm:block text-xs text-text-muted uppercase tracking-widest">
-            West Edmonton Mall
-          </div>
-        </div>
+        ))}
+      </nav>
 
-        {/* Right Side Controls */}
-        <div className="flex items-center gap-4">
-          {/* Desktop CTA Button */}
-          <motion.button
-            onClick={() => handleNavClick(6)}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="hidden md:inline-block px-6 py-2 bg-accent text-primary font-semibold text-sm uppercase tracking-wider hover:bg-accent-hover transition-colors duration-300"
-          >
-            Schedule a Tour
-          </motion.button>
+      {/* CTA */}
+      <button
+        className="btn-gold"
+        onClick={() => onSectionClick(sections.length - 1)}
+        style={{ fontSize: '0.65rem', padding: '0.6rem 1.2rem', flexShrink: 0 }}
+      >
+        <span>Partner With Us</span>
+      </button>
 
-          {/* Mobile Hamburger Menu Toggle */}
-          <button 
-            className="md:hidden text-white p-2"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            aria-label="Toggle Menu"
-          >
-            {mobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
-          </button>
-        </div>
-      </div>
+      {/* Hamburger (mobile) */}
+      <button
+        onClick={() => setMenuOpen(!menuOpen)}
+        style={{
+          display: 'none',
+          background: 'none',
+          border: 'none',
+          cursor: 'pointer',
+          padding: '0.5rem',
+          marginLeft: '1rem',
+          color: '#C8A96E',
+        }}
+        className="hamburger-btn"
+      >
+        <div style={{ width: '20px', height: '1.5px', background: 'currentColor', marginBottom: '5px', transition: 'transform 0.3s', transform: menuOpen ? 'rotate(45deg) translate(4px, 5px)' : 'none' }} />
+        <div style={{ width: '20px', height: '1.5px', background: 'currentColor', opacity: menuOpen ? 0 : 1, transition: 'opacity 0.3s' }} />
+        <div style={{ width: '20px', height: '1.5px', background: 'currentColor', marginTop: '5px', transition: 'transform 0.3s', transform: menuOpen ? 'rotate(-45deg) translate(4px, -5px)' : 'none' }} />
+      </button>
 
-      {/* Mobile Fullscreen Menu Overlay */}
+      {/* Mobile menu */}
       <AnimatePresence>
-        {mobileMenuOpen && (
+        {menuOpen && (
           <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            className="absolute top-full left-0 right-0 bg-primary/95 backdrop-blur-xl border-b border-white/10 overflow-hidden md:hidden shadow-2xl"
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            style={{
+              position: 'fixed',
+              top: '64px', left: 0, right: 0,
+              background: 'rgba(8,8,8,0.97)',
+              backdropFilter: 'blur(20px)',
+              borderBottom: '1px solid #1e1e1e',
+              padding: '1rem',
+              zIndex: 99,
+            }}
           >
-            <nav className="flex flex-col py-2">
-              {sectionLabels.map((label, index) => (
-                <button
-                  key={index}
-                  onClick={() => handleNavClick(index)}
-                  className="px-6 py-4 text-left text-white border-b border-white/5 last:border-0 hover:bg-white/5 transition-colors flex items-center"
-                >
-                  <span className="text-accent font-mono text-sm mr-4">{String(index + 1).padStart(2, '0')}</span>
-                  <span className="text-lg tracking-wide">{label}</span>
-                </button>
-              ))}
-              
-              {/* Mobile CTA inside menu */}
+            {sections.map((sec, i) => (
               <button
-                onClick={() => handleNavClick(6)}
-                className="mx-6 my-6 py-4 bg-accent text-primary font-bold tracking-widest uppercase text-sm rounded-none hover:bg-accent-hover transition-colors"
+                key={sec.id}
+                onClick={() => { onSectionClick(i); setMenuOpen(false); }}
+                style={{
+                  display: 'block',
+                  width: '100%',
+                  textAlign: 'left',
+                  background: 'none',
+                  border: 'none',
+                  cursor: 'pointer',
+                  padding: '0.75rem 1rem',
+                  fontFamily: "'DM Mono', monospace",
+                  fontSize: '0.7rem',
+                  letterSpacing: '0.2em',
+                  textTransform: 'uppercase',
+                  color: i === activeSection ? '#C8A96E' : '#706860',
+                  borderLeft: i === activeSection ? '2px solid #C8A96E' : '2px solid transparent',
+                }}
               >
-                Schedule a Tour
+                {sec.label}
               </button>
-            </nav>
+            ))}
           </motion.div>
         )}
       </AnimatePresence>
-    </motion.header>
+
+      <style>{`
+        @media (max-width: 900px) {
+          .desktop-nav { display: none !important; }
+          .hamburger-btn { display: block !important; }
+        }
+        @media (min-width: 1100px) {
+          .wem-wordmark { display: block !important; }
+        }
+      `}</style>
+    </header>
   );
 }

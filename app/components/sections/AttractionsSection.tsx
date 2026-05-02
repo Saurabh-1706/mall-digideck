@@ -1,196 +1,155 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import VideoBackground from '../ui/VideoBackground';
-import { IMAGE_URLS, ATTRACTIONS_DATA, WEM_ATTRACTIONS_REAL } from '../../lib/constants';
-import ScrollReveal from '../ui/ScrollReveal';
-import ImageCollage from '../ui/ImageCollage';
-import Section3DBackground from '../ui/Section3DBackground';
+
+const ease = [0.16, 1, 0.3, 1] as const;
+
+const ATTRACTIONS = [
+  {
+    name: 'Galaxyland',
+    type: 'Indoor Amusement Park',
+    desc: "The world's largest indoor amusement park — 27 rides and attractions, including roller coasters, a triple-loop ride, and family zones. Draws 2M+ visitors annually.",
+    stat: '27 Rides',
+    img: '/images/new/galaxyland.jpg',
+    icon: '🎢',
+  },
+  {
+    name: 'World Waterpark',
+    type: 'Indoor Waterpark',
+    desc: "The world's largest indoor wave pool spans 5 acres under a climate-controlled dome. Year-round tropical escape inside the mall — unprecedented for any retail destination.",
+    stat: '5 Acre Wave Pool',
+    img: '/images/new/world-water-park.jpg',
+    icon: '🌊',
+  },
+  {
+    name: 'Ice Palace',
+    type: 'NHL-Spec Ice Rink',
+    desc: "A full NHL-specification ice surface hosts public skating, hockey leagues, and figure skating. One of the few indoor arenas in the world inside a shopping centre.",
+    stat: 'NHL Spec Rink',
+    img: '/images/new/ice-palace.jpg',
+    icon: '⛸️',
+  },
+  {
+    name: 'Sea Life Caverns',
+    type: 'Indoor Aquarium',
+    desc: "Home to sea lions, sharks, tropical fish and interactive marine experiences with 100+ species. A world-class aquarium experience accessible without leaving the mall.",
+    stat: '100+ Species',
+    img: '/images/new/sea-life.jpg',
+    icon: '🐠',
+  },
+];
 
 export default function AttractionsSection() {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [selectedAttraction, setSelectedAttraction] = useState<number | null>(null);
+  const [active, setActive] = useState(0);
 
   return (
-    <section ref={containerRef} id="attractions" className="relative h-full w-full overflow-hidden">
-      {/* Three.js 3D Background - Dynamic Burst Particles */}
-      <Section3DBackground
-        particleColor="#FFD700"
-        secondaryColor="#C9A962"
-        pattern="burst"
-        particleCount={1800}
-        mouseInteraction={true}
-        opacity={0.5}
-        className="z-0"
-      />
-      
-      <VideoBackground
-        imageSrc={IMAGE_URLS.attractions}
-        overlay="bg-black/80"
-        kenBurns={true}
-      >
+    <div style={{ position: 'relative', width: '100%', height: '100%', overflow: 'hidden', background: '#080808', display: 'flex' }}>
 
+      {/* Left: tabs */}
+      <div style={{
+        position: 'relative', zIndex: 2,
+        width: '45%',
+        display: 'flex', flexDirection: 'column', justifyContent: 'center',
+        padding: '80px 3% 60px 6%',
+      }}>
+        <motion.p className="eyebrow" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} style={{ marginBottom: '0.8rem' }}>
+          World-Class Attractions
+        </motion.p>
+        <motion.h2
+          className="display"
+          initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }} transition={{ duration: 0.9, ease }}
+          style={{ fontSize: 'clamp(2rem, 4vw, 3.2rem)', marginBottom: '2rem' }}
+        >
+          The world's most visited<br />
+          <em className="display-italic" style={{ fontSize: 'clamp(2rem, 4vw, 3.2rem)' }}>indoor destination.</em>
+        </motion.h2>
 
-        <div className="absolute inset-0 px-6 py-24 overflow-y-auto z-10" data-lenis-prevent="true">
-          <div className="max-w-7xl mx-auto">
-            {/* Header */}
-            <ScrollReveal>
-              <div className="text-center mb-12">
-                <h2 className="text-5xl md:text-7xl font-bold text-white mb-6">
-                  Beyond <span className="text-accent">Shopping</span>
-                </h2>
-                <p className="text-xl text-text-muted max-w-3xl mx-auto">
-                  World-class attractions that drive foot traffic
-                </p>
-              </div>
-            </ScrollReveal>
+        {/* Tabs */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0' }}>
+          {ATTRACTIONS.map((a, i) => (
+            <motion.button
+              key={i}
+              onClick={() => setActive(i)}
+              initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }} transition={{ delay: i * 0.1, duration: 0.6, ease }}
+              style={{
+                display: 'flex', alignItems: 'flex-start',
+                gap: '1rem', padding: '1rem 1.2rem',
+                background: 'none', border: 'none', cursor: 'pointer',
+                textAlign: 'left',
+                borderLeft: i === active ? '2px solid #C8A96E' : '2px solid #1e1e1e',
+                borderBottom: '1px solid #1e1e1e',
+                transition: 'border-color 0.3s ease, background 0.3s ease',
+                background: i === active ? 'rgba(200,169,110,0.05)' : 'transparent',
+              }}
+            >
+              <span style={{ fontSize: '1.2rem', flexShrink: 0, marginTop: '0.1rem' }}>{a.icon}</span>
+              <div>
+                <div style={{
+                  fontFamily: "'DM Sans', sans-serif",
+                  fontSize: '0.9rem', fontWeight: 500,
+                  color: i === active ? '#C8A96E' : '#e8e0d0',
+                  transition: 'color 0.3s ease',
+                  marginBottom: '0.2rem',
+                }}>{a.name}</div>
+                <div className="eyebrow" style={{ fontSize: '0.52rem', color: '#706860' }}>{a.type}</div>
 
-            {/* Strip — all WEM attractions side by side */}
-            <ScrollReveal>
-              <div className="mb-12 h-[240px]">
-                <ImageCollage
-                  images={[
-                    { src: '/images/attractions.png',             alt: 'WEM Indoor Attractions Overview',  label: '🏟️ Inside WEM' },
-                    { src: WEM_ATTRACTIONS_REAL[0],               alt: 'Galaxyland Indoor Theme Park',     label: '🎢 Galaxyland' },
-                    { src: '/images/waterpark-v2.png',            alt: 'World Waterpark Wave Pool',        label: '🌊 World Waterpark' },
-                    { src: WEM_ATTRACTIONS_REAL[2],               alt: 'Ice Palace Skating Rink',          label: '⛸️ Ice Palace' },
-                    { src: '/images/attractions-coaster.jpg',     alt: 'Amusement Rides & Attractions',   label: '🎡 Rides & Fun' },
-                  ]}
-                  layout="strip"
-                />
-              </div>
-            </ScrollReveal>
-
-            {/* Main Attractions - Two Column Layout with Enhanced Collage */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
-              {/* Left: Attraction Details */}
-              <div className="flex flex-col justify-center">
-                {ATTRACTIONS_DATA.main.map((attraction, index) => (
-                  <ScrollReveal key={index} delay={index * 0.15}>
+                <AnimatePresence>
+                  {i === active && (
                     <motion.div
-                      className={`mb-4 p-6 border border-border cursor-pointer transition-all duration-300 ${
-                        selectedAttraction === index
-                          ? 'border-accent bg-surface'
-                          : 'hover:border-accent/50'
-                      }`}
-                      onClick={() => setSelectedAttraction(selectedAttraction === index ? null : index)}
-                      whileHover={{ scale: 1.02 }}
+                      initial={{ opacity: 0, height: 0, marginTop: 0 }}
+                      animate={{ opacity: 1, height: 'auto', marginTop: '0.6rem' }}
+                      exit={{ opacity: 0, height: 0, marginTop: 0 }}
+                      transition={{ duration: 0.4, ease }}
                     >
-                      <div className="flex items-start justify-between mb-3">
-                        <div className="flex items-center gap-4">
-                          <span className="text-4xl">{attraction.icon}</span>
-                          <div>
-                            <h3 className="text-2xl font-bold text-white mb-1">{attraction.name}</h3>
-                            <div className="text-accent text-sm uppercase tracking-wider">
-                              {attraction.type}
-                            </div>
-                          </div>
-                        </div>
-                        <motion.div
-                          animate={{ rotate: selectedAttraction === index ? 180 : 0 }}
-                          className="text-accent"
-                        >
-                          ▼
-                        </motion.div>
-                      </div>
-
-                      <AnimatePresence>
-                        {selectedAttraction === index && (
-                          <motion.div
-                            initial={{ opacity: 0, height: 0 }}
-                            animate={{ opacity: 1, height: 'auto' }}
-                            exit={{ opacity: 0, height: 0 }}
-                            className="pt-4 border-t border-border"
-                          >
-                            <p className="text-white/80 mb-4 leading-relaxed">
-                              {attraction.description}
-                            </p>
-                            <div className="flex items-center gap-6">
-                              <div>
-                                <div className="text-3xl font-bold text-accent">
-                                  {attraction.annualVisitors}
-                                </div>
-                                <div className="text-white/60 text-sm">Annual Visitors</div>
-                              </div>
-                            </div>
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
+                      <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '0.78rem', color: '#706860', lineHeight: 1.7 }}>
+                        {a.desc}
+                      </p>
+                      <div style={{
+                        marginTop: '0.5rem',
+                        fontFamily: "'Cormorant Garamond', serif",
+                        fontSize: '1.1rem', color: '#C8A96E',
+                      }}>{a.stat}</div>
                     </motion.div>
-                  </ScrollReveal>
-                ))}
+                  )}
+                </AnimatePresence>
               </div>
-
-              {/* Right: attractions.png as hero — shows WEM interior with all attractions */}
-              <ScrollReveal>
-                <div className="h-[480px]">
-                  <ImageCollage
-                    images={[
-                      { src: '/images/attractions.png',         alt: 'WEM Indoor Attractions — Waterpark, Coaster & Stores', label: 'Inside WEM',     size: 'large' },
-                      { src: '/images/attractions-coaster.jpg', alt: 'Amusement Rides & Fair Attractions',                  label: 'Rides & Fun',    size: 'medium' },
-                      { src: WEM_ATTRACTIONS_REAL[1],           alt: 'World Waterpark',                                     label: 'Waterpark',      size: 'small' },
-                      { src: WEM_ATTRACTIONS_REAL[2],           alt: 'Ice Palace',                                          label: 'Ice Palace',     size: 'small' },
-                    ]}
-                    layout="left-heavy"
-                  />
-                </div>
-              </ScrollReveal>
-            </div>
-
-            {/* Combined Stats - Enhanced Cards */}
-            <ScrollReveal>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-                <motion.div 
-                  className="text-center p-8 bg-primary/60 backdrop-blur-sm border border-border rounded-lg"
-                  whileHover={{ scale: 1.05, borderColor: 'rgba(201, 169, 98, 0.5)' }}
-                >
-                  <div className="text-5xl font-bold text-accent mb-2">
-                    {ATTRACTIONS_DATA.totalAttractions}
-                  </div>
-                  <div className="text-text-muted uppercase tracking-wider text-sm">
-                    Total Attractions
-                  </div>
-                </motion.div>
-                <motion.div 
-                  className="text-center p-8 bg-primary/60 backdrop-blur-sm border border-border rounded-lg"
-                  whileHover={{ scale: 1.05, borderColor: 'rgba(201, 169, 98, 0.5)' }}
-                >
-                  <div className="text-5xl font-bold text-accent mb-2">
-                    {ATTRACTIONS_DATA.combinedAnnualVisitors}
-                  </div>
-                  <div className="text-text-muted uppercase tracking-wider text-sm">
-                    Combined Annual Visitors
-                  </div>
-                </motion.div>
-                <motion.div 
-                  className="text-center p-8 bg-primary/60 backdrop-blur-sm border border-border rounded-lg"
-                  whileHover={{ scale: 1.05, borderColor: 'rgba(201, 169, 98, 0.5)' }}
-                >
-                  <div className="text-5xl font-bold text-accent mb-2">
-                    4
-                  </div>
-                  <div className="text-text-muted uppercase tracking-wider text-sm">
-                    Major Attractions
-                  </div>
-                </motion.div>
-              </div>
-            </ScrollReveal>
-
-            {/* Description */}
-            <ScrollReveal delay={0.3}>
-              <div className="max-w-4xl mx-auto text-center pb-12">
-                <p className="text-lg text-text-muted leading-relaxed">
-                  West Edmonton Mall isn't just a shopping destination—it's a complete 
-                  entertainment complex. From the thrill of Galaxyland to the tropical paradise 
-                  of World Waterpark, these attractions draw millions of visitors who also shop, 
-                  dine, and explore the mall.
-                </p>
-              </div>
-            </ScrollReveal>
-          </div>
+            </motion.button>
+          ))}
         </div>
-      </VideoBackground>
-    </section>
+      </div>
+
+      {/* Right: crossfading image */}
+      <div style={{ position: 'absolute', right: 0, top: 0, width: '58%', height: '100%', zIndex: 1 }}>
+        <AnimatePresence mode="wait">
+          <motion.img
+            key={active}
+            src={ATTRACTIONS[active].img}
+            alt={ATTRACTIONS[active].name}
+            initial={{ opacity: 0, scale: 1.04 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.98 }}
+            transition={{ duration: 0.65, ease }}
+            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+          />
+        </AnimatePresence>
+        <div style={{
+          position: 'absolute', inset: 0,
+          background: 'linear-gradient(to right, #080808 0%, rgba(8,8,8,0.3) 30%, rgba(8,8,8,0.0) 100%)',
+        }} />
+        <div style={{
+          position: 'absolute', bottom: '2rem', right: '2rem',
+          fontFamily: "'Cormorant Garamond', serif",
+          fontSize: 'clamp(3rem, 6vw, 5rem)',
+          color: 'rgba(200,169,110,0.15)',
+          fontWeight: 300,
+          pointerEvents: 'none',
+        }}>
+          {ATTRACTIONS[active].stat}
+        </div>
+      </div>
+    </div>
   );
 }

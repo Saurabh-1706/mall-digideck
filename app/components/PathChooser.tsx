@@ -61,11 +61,25 @@ export default function PathChooser({ onChoosePath, onSkip }: PathChooserProps) 
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-[#0A0A0A] flex flex-col items-center justify-center overflow-hidden">
-      {/* Ambient background */}
+    <div className="fixed inset-0 z-50 flex flex-col items-center justify-center overflow-hidden">
+      {/* Cinematic background image */}
+      <div className="absolute inset-0">
+        <Image
+          src="/images/wem-real-interior.jpg"
+          alt="West Edmonton Mall Interior"
+          fill
+          className="object-cover"
+          priority
+        />
+        {/* Dark overlay layers */}
+        <div className="absolute inset-0 bg-black/75" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/80" />
+      </div>
+
+      {/* Ambient glow orbs */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#C9A962]/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-[#A8C4E0]/5 rounded-full blur-3xl" />
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#C9A962]/10 rounded-full blur-3xl" />
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-[#A8C4E0]/10 rounded-full blur-3xl" />
       </div>
 
       <motion.div

@@ -1,120 +1,123 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import EntryScreen from './components/EntryScreen';
+import { useEffect, useRef, useState } from 'react';
+import TopBar from './components/navigation/TopBar';
+import SideNav from './components/navigation/SideNav';
+import LoadingScreen from './components/LoadingScreen';
 import IntroVideo from './components/IntroVideo';
-import PathChooser from './components/PathChooser';
-import PresentationMode from './components/PresentationMode';
-import LeftNav from './components/navigation/LeftNav';
-import WhySection from './components/sections/WhySection';
+import HeroSection from './components/sections/HeroSection';
+import ScaleSection from './components/sections/ScaleSection';
 import RetailSection from './components/sections/RetailSection';
 import LuxurySection from './components/sections/LuxurySection';
 import DiningSection from './components/sections/DiningSection';
 import AttractionsSection from './components/sections/AttractionsSection';
 import EventsSection from './components/sections/EventsSection';
+import PersonalizeSection from './components/sections/PersonalizeSection';
 import CTASection from './components/sections/CTASection';
 
-type AppStage = 'entry' | 'intro' | 'path' | 'main';
-type AudiencePath = 'tenant' | 'sponsor' | 'event' | 'all';
+const SECTIONS = [
+  { id: 'hero',         label: 'Home' },
+  { id: 'scale',        label: 'Scale' },
+  { id: 'retail',       label: 'Retail' },
+  { id: 'luxury',       label: 'Luxury' },
+  { id: 'dining',       label: 'Dining' },
+  { id: 'attractions',  label: 'Attractions' },
+  { id: 'events',       label: 'Events' },
+  { id: 'personalize',  label: 'Your Brand' },
+  { id: 'cta',          label: 'Partner' },
+];
 
-// Define curated paths — each path shows sections in a different order optimized for that audience
-const PATH_CONFIGS: Record<AudiencePath, { slides: React.ReactNode[]; navLabels: string[] }> = {
-  tenant: {
-    slides: [],
-    navLabels: ['Overview', 'Retail', 'Luxury', 'Dining', 'Attractions', 'Events', 'Contact'],
-  },
-  sponsor: {
-    slides: [],
-    navLabels: ['Overview', 'Events', 'Why WEM', 'Attractions', 'Contact'],
-  },
-  event: {
-    slides: [],
-    navLabels: ['Overview', 'Attractions', 'Events', 'Why WEM', 'Contact'],
-  },
-  all: {
-    slides: [],
-    navLabels: ['Overview', 'Retail', 'Luxury', 'Dining', 'Attractions', 'Events', 'Contact'],
-  },
-};
+// 3-stage app flow: loading → intro video → main deck
+type Stage = 'loading' | 'intro' | 'deck';
 
 export default function Home() {
-  const [stage, setStage] = useState<AppStage>('entry');
-  const [audiencePath, setAudiencePath] = useState<AudiencePath>('all');
-  const [currentSlide, setCurrentSlide] = useState(0);
+  const [stage, setStage] = useState<Stage>('loading');
+  const [activeSection, setActiveSection] = useState(0);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const sectionRefs = useRef<(HTMLElement | null)[]>([]);
 
-  const handleEnter = () => setStage('intro');
-  const handleIntroComplete = () => setStage('path');
-
-  const handleChoosePath = (path: 'tenant' | 'sponsor' | 'event') => {
-    setAudiencePath(path);
-    setStage('main');
-  };
-
-  const handleSkipPath = () => {
-    setAudiencePath('all');
-    setStage('main');
-  };
-
-  // Listen for slide changes from PresentationMode
+  // ── Keyboard navigation ─────────────────────────────
   useEffect(() => {
-    const handleGoToSlide = (e: CustomEvent) => setCurrentSlide(e.detail);
-    const handleSlideChanged = (e: CustomEvent) => setCurrentSlide(e.detail);
-    window.addEventListener('goToSlide', handleGoToSlide as EventListener);
-    window.addEventListener('slideChanged', handleSlideChanged as EventListener);
-    return () => {
-      window.removeEventListener('goToSlide', handleGoToSlide as EventListener);
-      window.removeEventListener('slideChanged', handleSlideChanged as EventListener);
+    const onKey = (e: KeyboardEvent) => {
+      if (stage !== 'deck') return;
+      if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
+        scrollToSection(Math.min(activeSection + 1, SECTIONS.length - 1));
+      }
+      if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+        scrollToSection(Math.max(activeSection - 1, 0));
+      }
     };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [activeSection, stage]);
+
+  // ── Intersection observer ───────────────────────────
+  useEffect(() => {
+    if (stage !== 'deck') return;
+    const obs = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const idx = SECTIONS.findIndex(s => s.id === entry.target.id);
+            if (idx !== -1) setActiveSection(idx);
+          }
+        });
+      },
+      { root: containerRef.current, threshold: 0.5 }
+    );
+    sectionRefs.current.forEach(el => el && obs.observe(el));
+    return () => obs.disconnect();
+  }, [stage]);
+
+  // ── goToSection events from CTAs ────────────────────
+  useEffect(() => {
+    const handler = (e: CustomEvent) => scrollToSection(e.detail);
+    window.addEventListener('goToSection', handler as EventListener);
+    return () => window.removeEventListener('goToSection', handler as EventListener);
   }, []);
 
-  if (stage === 'entry') return <EntryScreen onEnter={handleEnter} />;
-  if (stage === 'intro') return <IntroVideo onComplete={handleIntroComplete} />;
-  if (stage === 'path') return <PathChooser onChoosePath={handleChoosePath} onSkip={handleSkipPath} />;
-
-  // Build slides based on audience path
-  const allSections = {
-    why: <WhySection key="why" />,
-    retail: <RetailSection key="retail" />,
-    luxury: <LuxurySection key="luxury" />,
-    dining: <DiningSection key="dining" />,
-    attractions: <AttractionsSection key="attractions" />,
-    events: <EventsSection key="events" />,
-    cta: <CTASection key="cta" />,
+  const scrollToSection = (idx: number) => {
+    const el = sectionRefs.current[idx];
+    if (el && containerRef.current) {
+      containerRef.current.scrollTo({ top: el.offsetTop, behavior: 'smooth' });
+    }
   };
 
-  type SectionKey = keyof typeof allSections;
+  // ── Stage: Loading ──────────────────────────────────
+  if (stage === 'loading') {
+    return <LoadingScreen onComplete={() => setStage('intro')} />;
+  }
 
-  const pathSections: Record<AudiencePath, SectionKey[]> = {
-    tenant: ['why', 'retail', 'luxury', 'dining', 'attractions', 'events', 'cta'],
-    sponsor: ['why', 'events', 'attractions', 'retail', 'cta'],
-    event: ['why', 'attractions', 'events', 'dining', 'cta'],
-    all: ['why', 'retail', 'luxury', 'dining', 'attractions', 'events', 'cta'],
-  };
+  // ── Stage: Intro Video ──────────────────────────────
+  if (stage === 'intro') {
+    return <IntroVideo onComplete={() => setStage('deck')} />;
+  }
 
-  const pathNavLabels: Record<AudiencePath, string[]> = {
-    tenant: ['Overview', 'Retail', 'Luxury', 'Dining', 'Attractions', 'Events', 'Contact'],
-    sponsor: ['Overview', 'Events & Platform', 'Attractions', 'Retail', 'Contact'],
-    event: ['Overview', 'Venues', 'Events', 'Dining', 'Contact'],
-    all: ['Overview', 'Retail', 'Luxury', 'Dining', 'Attractions', 'Events', 'Contact'],
-  };
-
-  const slides = pathSections[audiencePath].map(key => allSections[key]);
-  const navLabels = pathNavLabels[audiencePath];
-
-  // Audience badge for TopBar
-  const audienceBadge: Record<AudiencePath, { label: string; color: string } | null> = {
-    tenant: { label: 'Retail Tenant Path', color: '#C9A962' },
-    sponsor: { label: 'Brand Sponsor Path', color: '#A8C4E0' },
-    event: { label: 'Event Partner Path', color: '#E8B4B8' },
-    all: null,
-  };
-
-  const badge = audienceBadge[audiencePath];
-
+  // ── Stage: Main Deck ────────────────────────────────
   return (
-    <PresentationMode
-      children={slides}
-      leftNav={<LeftNav activeSlide={currentSlide} navLabels={navLabels} audienceBadge={badge} />}
-    />
+    <>
+      <TopBar sections={SECTIONS} activeSection={activeSection} onSectionClick={scrollToSection} />
+      <SideNav sections={SECTIONS} activeSection={activeSection} onSectionClick={scrollToSection} />
+
+      <div ref={containerRef} className="snap-container">
+        {SECTIONS.map((sec, i) => {
+          const SectionComponent = [
+            HeroSection, ScaleSection, RetailSection, LuxurySection,
+            DiningSection, AttractionsSection, EventsSection,
+            PersonalizeSection, CTASection,
+          ][i];
+          return (
+            <section
+              key={sec.id}
+              id={sec.id}
+              className="snap-section"
+              ref={el => { sectionRefs.current[i] = el; }}
+            >
+              <SectionComponent />
+            </section>
+          );
+        })}
+      </div>
+    </>
   );
 }
