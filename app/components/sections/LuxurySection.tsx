@@ -36,23 +36,35 @@ export default function LuxurySection({ isActive }: Props) {
   return (
     <div style={{ position: 'relative', width: '100%', height: '100%', overflow: 'hidden', background: '#080808', display: 'flex' }}>
 
-      {/* Right full-bleed image + video */}
-      <div style={{ position: 'absolute', right: 0, top: 0, width: '55%', height: '100%' }}>
-        {/* Primary image — always visible */}
-        <img
-          src="/images/luxury-main.jpg"
-          alt="WEM Luxury Wing"
-          style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
-        />
-        {/* Cinematic video overlay on top of image */}
-        <video
-          autoPlay muted loop playsInline
-          style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: 0.55, mixBlendMode: 'luminosity' }}
-        >
-          <source src="https://videos.pexels.com/video-files/3571264/3571264-hd_1920_1080_25fps.mp4" type="video/mp4" />
-        </video>
+      {/* Right full-bleed image collage */}
+      <div style={{ position: 'absolute', right: 0, top: 0, width: '55%', height: '100%', display: 'flex', flexDirection: 'column' }}>
+        {/* Primary: luxury3.png — full height left 70% */}
+        <div style={{ position: 'absolute', inset: 0, width: '70%', height: '100%' }}>
+          <img
+            src="/images/new/luxury3.png"
+            alt="WEM Luxury Wing"
+            style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+          />
+        </div>
+        {/* Secondary stack: right 30% split vertically */}
+        <div style={{ position: 'absolute', right: 0, top: 0, width: '30%', height: '50%', borderBottom: '2px solid #080808' }}>
+          <img
+            src="/images/new/luxury1.jpg"
+            alt="WEM Luxury Boutique"
+            style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+          />
+        </div>
+        <div style={{ position: 'absolute', right: 0, bottom: 0, width: '30%', height: '50%' }}>
+          <img
+            src="/images/new/luxury2.webp"
+            alt="WEM Luxury Interior"
+            style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+          />
+        </div>
         {/* Gradient toward left content */}
-        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to right, #080808 0%, rgba(8,8,8,0.6) 35%, rgba(8,8,8,0.1) 70%, rgba(8,8,8,0.2) 100%)' }} />
+        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to right, #080808 0%, rgba(8,8,8,0.55) 30%, rgba(8,8,8,0.05) 70%, rgba(8,8,8,0.15) 100%)' }} />
+        {/* Subtle dark vignette top & bottom */}
+        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(8,8,8,0.4) 0%, transparent 20%, transparent 80%, rgba(8,8,8,0.4) 100%)' }} />
       </div>
 
 
