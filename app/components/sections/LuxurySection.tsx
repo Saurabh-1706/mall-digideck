@@ -36,18 +36,23 @@ export default function LuxurySection({ isActive }: Props) {
   return (
     <div style={{ position: 'relative', width: '100%', height: '100%', overflow: 'hidden', background: '#080808', display: 'flex' }}>
 
-      {/* Right full-bleed video/image */}
+      {/* Right full-bleed image + video */}
       <div style={{ position: 'absolute', right: 0, top: 0, width: '55%', height: '100%' }}>
-        {/* TODO: replace src with official WEM luxury promo video */}
+        {/* Primary image — always visible */}
+        <img
+          src="/images/luxury-main.jpg"
+          alt="WEM Luxury Wing"
+          style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
+        />
+        {/* Cinematic video overlay on top of image */}
         <video
           autoPlay muted loop playsInline
-          style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
+          style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: 0.55, mixBlendMode: 'luminosity' }}
         >
           <source src="https://videos.pexels.com/video-files/3571264/3571264-hd_1920_1080_25fps.mp4" type="video/mp4" />
         </video>
-        {/* Image fallback behind video */}
-        <img src="/images/wem-real-luxury.jpg" alt="WEM Luxury Wing" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', zIndex: -1 }} />
-        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to right, #080808 0%, rgba(8,8,8,0.5) 40%, rgba(8,8,8,0.0) 100%)' }} />
+        {/* Gradient toward left content */}
+        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to right, #080808 0%, rgba(8,8,8,0.6) 35%, rgba(8,8,8,0.1) 70%, rgba(8,8,8,0.2) 100%)' }} />
       </div>
 
 
